@@ -20,6 +20,7 @@ Columns in `pins.csv`:
 - `link`: the Etsy listing or store page, without tracking tags (they are added for you).
   Leave it empty until the product is live; that pin is then left out of the upload CSV.
 - `title`, `description`, `keywords`, `board`, `publish_date`: what Pinterest shows and when
+  (`publish_date` is US Eastern time; the upload CSV is converted to UTC for Pinterest)
 
 Image URLs in the CSV point to
 `https://raw.githubusercontent.com/arabicmadefun/arabicmadefun-assets/main/pins/`.

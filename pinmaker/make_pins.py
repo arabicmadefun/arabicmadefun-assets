@@ -8,10 +8,14 @@
 Output:
   pins/amf-pin-<id>.jpg           1000x1500 images
   pins/pinterest-bulk-upload.csv  ready for Pinterest > Create > Bulk create
+  (publish_date in pins.csv is US Eastern time; the CSV gets UTC, as Pinterest expects.
+   Set PIN_TZ, e.g. PIN_TZ=Asia/Dubai, to use another time zone.)
 Pins with an empty `link` (product not live yet) get an image but are left
 out of the CSV, and are listed at the end of the run.
 """
 import argparse, csv, html, os, sys, tempfile
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from urllib.parse import urlencode
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,6 +23,13 @@ HERE = os.path.join(ROOT, "pinmaker")
 OUT = os.path.join(ROOT, "pins")
 DEFAULT_BASE = "https://raw.githubusercontent.com/arabicmadefun/arabicmadefun-assets/main/pins/"
 CAMPAIGN = "pins_nov26"
+# publish_date in pins.csv is local time here; Pinterest wants UTC
+LOCAL_TZ = ZoneInfo(os.environ.get("PIN_TZ") or "America/New_York")
+
+
+def to_utc(local):
+    dt = datetime.strptime(local, "%Y-%m-%dT%H:%M").replace(tzinfo=LOCAL_TZ)
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
 
 
 def page_html(row, template):
@@ -85,7 +96,7 @@ def write_csv(rows, base):
                 continue
             w.writerow([r["title"], f"{base}amf-pin-{r['id']}.jpg", r["board"], "",
                         r["description"], tracked(r["link"].strip(), r["id"]),
-                        r["publish_date"] + ":00", r["keywords"]])
+                        to_utc(r["publish_date"]), r["keywords"]])
     print(f"\nwrote {os.path.relpath(dest, ROOT)}: {len(rows) - len(waiting)} pins")
     if waiting:
         print("not in the CSV yet (no link, product not live):")
