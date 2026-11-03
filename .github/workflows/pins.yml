@@ -1,0 +1,27 @@
+name: Make Pinterest pins
+# Runs when pinmaker/ or product images change: re-makes pins/ and the
+# Pinterest bulk-upload CSV, then commits them back.
+on:
+  push:
+    branches: [main]
+    paths: ["pinmaker/**", "products/**", "bundles/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  pins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install playwright==1.48.0 && python -m playwright install --with-deps chromium
+      - run: python pinmaker/make_pins.py
+        env:
+          PIN_BASE_URL: ${{ vars.PIN_BASE_URL }}
+      - name: Commit pins
+        run: |
+          git config user.name "pin-bot"
+          git config user.email "pin-bot@users.noreply.github.com"
+          git add pins
+          git diff --cached --quiet || (git commit -m "Re-make Pinterest pins" && git push)

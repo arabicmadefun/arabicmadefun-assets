@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;font-weight:700;src:url(fonts/outfit-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:Outfit;font-weight:800;src:url(fonts/outfit-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:Nunito;font-weight:600;src:url(fonts/nunito-sans-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:Nunito;font-weight:700;src:url(fonts/nunito-sans-latin-700-normal.woff2) format("woff2")}
+:root{--indigo:#22305A;--cream:#FBF6EC;--coral:#E9765B;--saffron:#F2B035;--mint:#5FB8A2;--gold:#C9A227}
+*{box-sizing:border-box;margin:0}
+html,body{width:1000px;height:1500px;overflow:hidden}
+body{background:var(--cream);font-family:Nunito,sans-serif;color:var(--indigo);display:flex;flex-direction:column;align-items:center}
+header{width:100%;height:300px;background:var(--indigo);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;padding:0 50px;text-align:center}
+h1{font:800 78px/1.02 Outfit,sans-serif;color:#fff;letter-spacing:-.5px}
+.sub{font:700 38px/1.2 Nunito,sans-serif;color:var(--accent)}
+.card{margin-top:48px;width:880px;height:880px;background:#fff;border-radius:44px;box-shadow:0 10px 0 rgba(34,48,90,.08),0 2px 18px rgba(34,48,90,.10);overflow:hidden;position:relative}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card.multi{background:#FCE9B8}
+.card.multi img{width:450px;height:450px;inset:auto;border-radius:28px;box-shadow:0 14px 30px rgba(34,48,90,.25);border:6px solid #fff;object-fit:cover}
+.card.multi img:nth-child(1){left:215px;top:90px;z-index:2}
+.card.multi img:nth-child(2){left:18px;top:360px;transform:rotate(-6deg)}
+.card.multi img:nth-child(3){right:18px;top:360px;transform:rotate(6deg)}
+.cta{margin-top:46px;height:104px;padding:0 56px;border-radius:999px;background:var(--accent);color:var(--ctaInk);display:flex;align-items:center;font:800 40px/1 Outfit,sans-serif;border:4px solid var(--indigo)}
+.mark{margin-top:auto;margin-bottom:44px;font:800 40px/1 Outfit,sans-serif}
+.mark b{color:var(--coral);font-weight:800}
+.product{--accent:var(--saffron);--ctaInk:var(--indigo)}
+.bundle{--accent:var(--coral);--ctaInk:var(--indigo)}
+.ramadan{--accent:var(--gold);--ctaInk:var(--indigo)}
+.sampler{--accent:var(--saffron);--ctaInk:var(--indigo)}
+.bundle .sub{color:#F4A08B}
+</style></head>
+<body class="{{style}}">
+<header><h1>{{headline}}</h1><p class="sub">{{subline}}</p></header>
+<div class="card {{cardclass}}">{{images}}</div>
+<div class="cta">{{cta}}</div>
+<p class="mark">Arabic <b>Made</b> Fun</p>
+</body></html>
