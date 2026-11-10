@@ -97,10 +97,21 @@ body:has(.amf-rg){background:#FBF6EC}
 .rg-preview{position:relative;align-self:stretch;border-radius:20px;overflow:hidden;border:3px solid var(--ink);background:var(--white)}
 .rg-preview-in{padding:16px;filter:blur(7px);user-select:none;pointer-events:none}
 .rg-preview-lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.rg-preview-lock span{background:var(--ink);color:var(--white);font-weight:800;border-radius:999px;padding:8px 16px;display:flex;gap:8px;align-items:center}
+.amf-rg .rg-preview-lock button{background:var(--ink);color:var(--white);font-weight:800;border-radius:999px;padding:8px 16px;display:flex;gap:8px;align-items:center}
 .amf-rg ul.rg-ticks{list-style:none;margin:0;padding:0;display:grid;gap:8px;align-self:stretch}
 .rg-ticks li{display:flex;gap:10px;align-items:flex-start;font-size:16px;margin:0}
 .rg-ticks li:before{content:"";flex:none;width:22px;height:22px;border-radius:50%;background:var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' stroke='%2322305A' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;margin-top:1px}
+.rg-phone{display:flex;gap:8px}
+.amf-rg .rg-cc,.amf-rg .rg-select{font:inherit;font-weight:600;font-size:17px;border:3px solid var(--ink);border-radius:14px;padding:12px 10px;background:var(--white);color:var(--ink);min-height:0;height:auto;box-shadow:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%2322305A' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:16px;padding-right:30px}
+.amf-rg .rg-select{width:100%}
+.rg-ccwrap{position:relative;flex:none;width:112px}
+.rg-ccshow{display:flex;align-items:center;height:100%;border:3px solid var(--ink);border-radius:14px;background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%2322305A' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center/16px;padding:0 30px 0 12px;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.amf-rg .rg-cc{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.rg-ccwrap:focus-within .rg-ccshow{outline:3px solid var(--coral);outline-offset:3px}
+.rg-ccwrap.bad .rg-ccshow{border-color:var(--err)}
+.amf-rg .rg-phone input{flex:1;min-width:0}
+.amf-rg .rg-cc[aria-invalid="true"],.amf-rg .rg-select[aria-invalid="true"]{border-color:var(--err)}
+.rg-sound{font-size:14px;font-weight:700;color:var(--ink);background:var(--coral-tint);border-radius:14px;padding:10px 14px;align-self:stretch;text-align:center}
 .rg-form{display:flex;flex-direction:column;gap:12px;align-self:stretch}
 .rg-micro{font-size:13px;color:var(--ink-soft);text-align:center}
 /* result */
@@ -164,13 +175,13 @@ body:has(.amf-rg){background:#FBF6EC}
       <div class="rg-big ar" id="rgBigText" lang="ar">ب</div>
       <div class="rg-pic hide" id="rgPic" aria-hidden="true"></div>
       <button class="rg-speak" id="rgSpeakBtn" type="button"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="#fff"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></span>Tap to check</button>
+      <p class="rg-sound" id="rgNoVoice" role="status" hidden>No sound? Turn off silent mode and turn the volume up. Your child can keep playing either way.</p>
       <div class="rg-answers">
         <button class="rg-btn yes" id="rgYesBtn" type="button">I read it!</button>
         <button class="rg-btn pass" id="rgPassBtn" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>Pass</button>
       </div>
       <p class="rg-hint">Too hard? Tap <b>Pass</b>. That's useful too!</p>
     </div>
-    <p class="rg-note" id="rgNoVoice" hidden>This phone has no Arabic voice installed, so the speaker stays quiet. Your child can still play.</p>
   </section>
 
   <!-- 3. TRACE -->
@@ -202,9 +213,9 @@ body:has(.amf-rg){background:#FBF6EC}
   <!-- 5. LEAD GATE -->
   <section class="rg-screen" id="rg-gate" hidden>
     <h2 class="rg-h2" id="rgGateTitle">Your child's reading result is ready!</h2>
-    <div class="rg-preview" aria-hidden="true">
-      <div class="rg-preview-in"><div class="rg-level"><small>Best fit</small>Words group</div><p class="rg-hint">Ready to read more words and build sentences.</p></div>
-      <div class="rg-preview-lock"><span><svg width="16" height="16" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2" fill="#fff"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#fff" stroke-width="2.5" fill="none"/></svg>Unlock the result</span></div>
+    <div class="rg-preview">
+      <div class="rg-preview-in" aria-hidden="true"><div class="rg-level"><small>Best fit</small>Words group</div><p class="rg-hint">Ready to read more words and build sentences.</p></div>
+      <div class="rg-preview-lock"><button type="button" id="rgUnlockPill"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" fill="#fff"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#fff" stroke-width="2.5" fill="none"/></svg>Unlock the result</button></div>
     </div>
     <ul class="rg-ticks">
       <li id="rgGetLevel">Your child's level and the right class group</li>
@@ -218,11 +229,11 @@ body:has(.amf-rg){background:#FBF6EC}
       <label class="rg-field" for="rgEmail">Your email
         <input id="rgEmail" type="email" inputmode="email" autocomplete="email" required>
       </label>
-      <label class="rg-field" for="rgWhatsApp">WhatsApp number <small>(optional, for class reminders)</small>
-        <input id="rgWhatsApp" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 123 4567" maxlength="25">
+      <label class="rg-field" for="rgLang">Your child's first language
+        <select id="rgLang" class="rg-select" required><option value="">Choose</option><option>English</option><option>Arabic</option><option>French</option><option>Urdu</option><option>Hindi</option><option>Amharic</option><option>Balochi</option><option>Bengali</option><option>Chinese (Mandarin)</option><option>Dutch</option><option>Farsi (Persian)</option><option>German</option><option>Gujarati</option><option>Italian</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Memoni</option><option>Nepali</option><option>Pashto</option><option>Portuguese</option><option>Punjabi</option><option>Russian</option><option>Saraiki</option><option>Sindhi</option><option>Sinhala</option><option>Somali</option><option>Spanish</option><option>Swahili</option><option>Tagalog (Filipino)</option><option>Tamil</option><option>Telugu</option><option>Turkish</option><option>Other</option></select>
       </label>
       <p class="rg-err" id="rgLeadErr" role="alert" hidden></p>
-      <button class="rg-btn go" id="rgLeadBtn" type="submit">Show the result</button>
+      <button class="rg-btn go" id="rgLeadBtn" type="submit"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.5" fill="none"/></svg>Unlock the result</button>
       <p class="rg-micro">We'll email you about your child's result and our free classes, plus a few tips. Unsubscribe anytime. We never share your details.</p>
     </form>
     <button class="rg-textbtn" id="rgSkipLead" type="button">Skip, just show the result</button>
@@ -260,9 +271,9 @@ body:has(.amf-rg){background:#FBF6EC}
         <div class="rg-form" id="rgBookContact" hidden>
           <label class="rg-field" for="rgBName">Your first name<input id="rgBName" type="text" autocomplete="given-name" maxlength="40"></label>
           <label class="rg-field" for="rgBEmail">Your email<input id="rgBEmail" type="email" inputmode="email" autocomplete="email"></label>
-          <label class="rg-field" for="rgBWhatsApp">WhatsApp number <small>(for the class link and reminders)</small><input id="rgBWhatsApp" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 123 4567" maxlength="25"></label>
+          <label class="rg-field" for="rgBLang">Your child's first language<select id="rgBLang" class="rg-select"><option value="">Choose</option><option>English</option><option>Arabic</option><option>French</option><option>Urdu</option><option>Hindi</option><option>Amharic</option><option>Balochi</option><option>Bengali</option><option>Chinese (Mandarin)</option><option>Dutch</option><option>Farsi (Persian)</option><option>German</option><option>Gujarati</option><option>Italian</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Memoni</option><option>Nepali</option><option>Pashto</option><option>Portuguese</option><option>Punjabi</option><option>Russian</option><option>Saraiki</option><option>Sindhi</option><option>Sinhala</option><option>Somali</option><option>Spanish</option><option>Swahili</option><option>Tagalog (Filipino)</option><option>Tamil</option><option>Telugu</option><option>Turkish</option><option>Other</option></select></label>
         </div>
-        <label class="rg-field" for="rgBWhatsApp2" id="rgWaOnly" hidden>WhatsApp number <small>(for the class link and reminders)</small><input id="rgBWhatsApp2" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 123 4567" maxlength="25"></label>
+        <div class="rg-field"><label for="rgCcB">WhatsApp number <small>(for the class link and reminders)</small></label><div class="rg-phone"><span class="rg-ccwrap"><span class="rg-ccshow" id="rgCcShowB" aria-hidden="true">Code</span><select id="rgCcB" class="rg-cc" aria-label="Country code"></select></span><input id="rgPhoneB" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number" maxlength="20" aria-label="WhatsApp number without the country code"></div></div>
         <p class="rg-err" id="rgBookErr" role="alert" hidden></p>
         <button class="rg-btn club" id="rgBookBtn" type="button">Book my free seat</button>
         <p class="rg-micro">Free · No card needed · Groups close at 6 children</p>
@@ -328,7 +339,11 @@ body:has(.amf-rg){background:#FBF6EC}
   function load(k){ try{ return JSON.parse(sessionStorage.getItem("amf_rg_"+k)||"null"); }catch(e){ return null; } }
 
   // ---------- content ----------
-  var CLIPS={};
+  // Recorded clips: put <key>.mp3 in audio/ next to rg.js and list the key in AUDIO_KEYS.
+  var AUDIO_KEYS=[];
+  var AUDIO_BASE=(function(){ try{ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/rg\.js.*$/,"audio/"):""; }catch(e){ return ""; } })();
+  var CLIPS={}; AUDIO_KEYS.forEach(function(k){ CLIPS[k]=AUDIO_BASE+k+".mp3"; });
+  var IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
   var PICS={{PICS_JSON}};
   var LETTERS=[{ar:"ب",say:"باء",key:"l_ba",pic:"duck",en:"بَطَّة · duck"},{ar:"ت",say:"تاء",key:"l_ta",pic:"apple",en:"تُفَّاحَة · apple"},{ar:"م",say:"ميم",key:"l_mim",pic:"banana",en:"مَوْز · banana"},{ar:"س",say:"سين",key:"l_sin",pic:"fish",en:"سَمَكَة · fish"}];
   var WORDS=[{ar:"بَاب",say:"بَاب",pic:"door",en:"door",key:"w_bab"},{ar:"قِطّ",say:"قِطّ",pic:"cat",en:"cat",key:"w_qitt"},{ar:"بَيْت",say:"بَيْت",pic:"house",en:"house",key:"w_bayt"}];
@@ -353,13 +368,34 @@ body:has(.amf-rg){background:#FBF6EC}
   var voice=null, voiceChecked=false;
   function pickVoice(){ if(!("speechSynthesis" in window)) return; var vs=window.speechSynthesis.getVoices()||[]; voice=vs.filter(function(v){return /^ar/i.test(v.lang);})[0]||null; if(vs.length) voiceChecked=true; }
   if("speechSynthesis" in window){ pickVoice(); try{ window.speechSynthesis.onvoiceschanged=pickVoice; }catch(e){} }
+  var clipCache={}, soundHintShown=false;
+  function soundHelp(){ $("rgNoVoice").hidden=false; }
+  function speakVoice(item){
+    if(!("speechSynthesis" in window)){ soundHelp(); return; }
+    pickVoice();
+    try{
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(item.say); u.lang=voice?voice.lang:"ar-SA"; if(voice) u.voice=voice; u.rate=0.7; u.pitch=1.05;
+      var started=false; u.onstart=function(){ started=true; }; u.onerror=function(){ soundHelp(); };
+      setTimeout(function(){ window.speechSynthesis.speak(u); },60);
+      setTimeout(function(){ if(!started) soundHelp(); },1800);
+      // iPhone mutes the phone voice in silent mode: show the tip once
+      if(IOS&&!soundHintShown){ soundHintShown=true; soundHelp(); }
+    }catch(e){ soundHelp(); }
+  }
   function speak(item,btn){
     if(btn){ btn.classList.add("playing"); setTimeout(function(){btn.classList.remove("playing");},1400); }
-    if(CLIPS[item.key]){ try{ new Audio(CLIPS[item.key]).play(); }catch(e){} return; }
-    if(!("speechSynthesis" in window)){ $("rgNoVoice").hidden=false; return; }
-    pickVoice(); if(voiceChecked&&!voice) $("rgNoVoice").hidden=false;
-    try{ window.speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(item.say); u.lang=voice?voice.lang:"ar-SA"; if(voice) u.voice=voice; u.rate=0.7; u.pitch=1.05; window.speechSynthesis.speak(u); }catch(e){ $("rgNoVoice").hidden=false; }
+    var url=CLIPS[item.key];
+    if(url){
+      try{
+        var a=clipCache[item.key]||(clipCache[item.key]=new Audio(url)); a.currentTime=0;
+        var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ speakVoice(item); });
+        return;
+      }catch(e){}
+    }
+    speakVoice(item);
   }
+  function warmClips(){ Object.keys(CLIPS).forEach(function(k){ try{ var a=clipCache[k]||(clipCache[k]=new Audio(CLIPS[k])); a.preload="auto"; a.load(); }catch(e){} }); }
   var actx=null;
   function tone(f,d,t){ try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); var o=actx.createOscillator(),g=actx.createGain(); o.type=t||"sine"; o.frequency.value=f; g.gain.value=0.08; o.connect(g); g.connect(actx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d); o.stop(actx.currentTime+d);}catch(e){} }
   function chime(){ tone(784,.18); setTimeout(function(){tone(1046,.25);},120); }
@@ -380,6 +416,27 @@ body:has(.amf-rg){background:#FBF6EC}
   function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e); }
   function cleanPhone(p){ p=(p||"").replace(/[^\d+]/g,""); return p; }
   function validPhone(p){ return !p || /^\+?\d{8,15}$/.test(p); }
+  var CC=[["Afghanistan","+93"],["Algeria","+213"],["Australia","+61"],["Austria","+43"],["Bahrain","+973"],["Bangladesh","+880"],["Belgium","+32"],["Bosnia","+387"],["Brazil","+55"],["Brunei","+673"],["Canada","+1"],["China","+86"],["Denmark","+45"],["Egypt","+20"],["Ethiopia","+251"],["Finland","+358"],["France","+33"],["Germany","+49"],["Ghana","+233"],["Greece","+30"],["Hong Kong","+852"],["India","+91"],["Indonesia","+62"],["Iran","+98"],["Iraq","+964"],["Ireland","+353"],["Italy","+39"],["Japan","+81"],["Jordan","+962"],["Kenya","+254"],["Kuwait","+965"],["Lebanon","+961"],["Libya","+218"],["Malaysia","+60"],["Maldives","+960"],["Mauritania","+222"],["Morocco","+212"],["Netherlands","+31"],["New Zealand","+64"],["Nigeria","+234"],["Norway","+47"],["Oman","+968"],["Pakistan","+92"],["Palestine","+970"],["Philippines","+63"],["Poland","+48"],["Portugal","+351"],["Qatar","+974"],["Russia","+7"],["Saudi Arabia","+966"],["Senegal","+221"],["Singapore","+65"],["Somalia","+252"],["South Africa","+27"],["South Korea","+82"],["Spain","+34"],["Sri Lanka","+94"],["Sudan","+249"],["Sweden","+46"],["Switzerland","+41"],["Syria","+963"],["Tanzania","+255"],["Thailand","+66"],["Tunisia","+216"],["Türkiye","+90"],["Uganda","+256"],["Ukraine","+380"],["United Arab Emirates","+971"],["United Kingdom","+44"],["United States","+1"],["Yemen","+967"]];
+  var TZ_CC={"Asia/Dubai":"+971","Asia/Riyadh":"+966","Asia/Qatar":"+974","Asia/Kuwait":"+965","Asia/Bahrain":"+973","Asia/Muscat":"+968","Africa/Cairo":"+20","Asia/Amman":"+962","Africa/Casablanca":"+212","Asia/Karachi":"+92","Asia/Kolkata":"+91","Asia/Calcutta":"+91","Europe/London":"+44","Europe/Paris":"+33","Europe/Berlin":"+49","Europe/Amsterdam":"+31","Europe/Brussels":"+32","Europe/Madrid":"+34","Europe/Rome":"+39","Europe/Istanbul":"+90","Asia/Kuala_Lumpur":"+60","Asia/Jakarta":"+62","Asia/Singapore":"+65","Asia/Dhaka":"+880","Asia/Colombo":"+94","Asia/Manila":"+63","Africa/Lagos":"+234","Africa/Johannesburg":"+27","Asia/Beirut":"+961","Asia/Baghdad":"+964","Africa/Tunis":"+216","Africa/Algiers":"+213","Europe/Dublin":"+353","Europe/Stockholm":"+46","Europe/Oslo":"+47","Europe/Zurich":"+41","Europe/Vienna":"+43"};
+  function guessCc(){ var tz=""; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""; }catch(e){} if(TZ_CC[tz]) return TZ_CC[tz]; if(/^America\//.test(tz)) return tz==="America/Toronto"||tz==="America/Vancouver"?"+1|Canada":"+1"; if(/^Australia\//.test(tz)) return "+61"; return ""; }
+  function fillCc(sel){
+    var g=guessCc(), gName=g.indexOf("|")>0?g.split("|")[1]:null; g=g.split("|")[0];
+    var html='<option value="">Code</option>', picked=false;
+    CC.forEach(function(c){ var on=!picked&&c[1]===g&&(!gName||gName===c[0])&&!(c[1]==="+1"&&!gName&&c[0]!=="United States"); if(on) picked=true; html+='<option value="'+c[1]+'"'+(on?" selected":"")+'>'+c[0]+" "+c[1]+'</option>'; });
+    sel.innerHTML=html;
+    var show=$(sel.id.replace("rgCc","rgCcShow"));
+    var upd=function(){ show.textContent=sel.value||"Code"; sel.parentNode.classList.remove("bad"); };
+    sel.addEventListener("change",upd); upd();
+  }
+  function fullPhone(sfx){
+    var cc=$("rgCc"+sfx).value, raw=($("rgPhone"+sfx).value||"").trim(), n=raw.replace(/[^\d+]/g,"");
+    if(!n) return {err:"Please add your WhatsApp number, so we can send the class link.",field:"rgPhone"+sfx};
+    if(/^\+|^00/.test(n)) n="+"+n.replace(/^\+|^00/,"");
+    else { if(!cc) return {err:"Please choose your country code.",field:"rgCc"+sfx}; n=cc+n.replace(/^0+/,""); }
+    if(!/^\+\d{8,15}$/.test(n)) return {err:"Please check the WhatsApp number.",field:"rgPhone"+sfx};
+    return {number:n};
+  }
+  fillCc($("rgCcB"));
 
   // ---------- start ----------
   Array.prototype.forEach.call($("rgAges").querySelectorAll("button"),function(b){
@@ -388,7 +445,8 @@ body:has(.amf-rg){background:#FBF6EC}
   $("rgStartBtn").addEventListener("click",function(){
     if(!state.age){ $("rgAges").classList.add("err"); $("rgStartErr").hidden=false; return; }
     state.name=($("rgChildName").value||"").trim().slice(0,30);
-    tone(660,.12); track("rg_start",{age:state.age}); startRound(0);
+    try{ if(navigator.audioSession) navigator.audioSession.type="playback"; }catch(e){}
+    warmClips(); tone(660,.12); track("rg_start",{age:state.age}); startRound(0);
   });
 
   // ---------- reading (adaptive) ----------
@@ -492,22 +550,28 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   $("rgLeadForm").addEventListener("submit",function(e){
     e.preventDefault();
-    var name=$("rgParentName").value.trim(), email=$("rgEmail").value.trim(), wa=cleanPhone($("rgWhatsApp").value), err=$("rgLeadErr");
-    [$("rgParentName"),$("rgEmail"),$("rgWhatsApp")].forEach(function(i){i.removeAttribute("aria-invalid");});
+    var name=$("rgParentName").value.trim(), email=$("rgEmail").value.trim(), lang=$("rgLang").value, err=$("rgLeadErr");
+    [$("rgParentName"),$("rgEmail"),$("rgLang")].forEach(function(i){i.removeAttribute("aria-invalid");});
     var bad=null;
     if(!name){ bad=["rgParentName","Please add your first name."]; }
     else if(!validEmail(email)){ bad=["rgEmail","Please check your email address."]; }
-    else if(!validPhone(wa)){ bad=["rgWhatsApp","Please check the WhatsApp number, with the country code (e.g. +971)."]; }
+    else if(!lang){ bad=["rgLang","Please choose your child's first language."]; }
     if(bad){ $(bad[0]).setAttribute("aria-invalid","true"); $(bad[0]).focus(); err.textContent=bad[1]; err.hidden=false; return; }
     err.hidden=true;
     var btn=$("rgLeadBtn"); btn.disabled=true; btn.textContent="Opening the result…";
-    state.lead={name:name,email:email,wa:wa};
-    var props=readingProps(); if(wa) props.whatsapp=wa;
+    state.lead={name:name,email:email,lang:lang};
+    var props=readingProps(); props.child_first_language=lang;
     var p1=klaviyo("profiles",{data:{type:"profile",attributes:{email:email,first_name:name,properties:props}}}).catch(function(){});
     var p2=klaviyo("subscriptions",{data:{type:"subscription",attributes:{custom_source:"Reading game",profile:{data:{type:"profile",attributes:{email:email}}}},relationships:{list:{data:{type:"list",id:LEAD_LIST}}}}}).catch(function(){});
     track("rg_lead_submit",{level:state.levelKey}); fb("ReadingGameLead",{level:state.levelKey});
     var t=setTimeout(showResult,2500);
     Promise.all([p1,p2]).then(function(){ clearTimeout(t); showResult(); });
+  });
+  $("rgUnlockPill").addEventListener("click",function(){
+    track("rg_unlock_tap");
+    var first=[$("rgParentName"),$("rgEmail"),$("rgLang")].filter(function(i){ return !i.value.trim(); })[0];
+    if(first){ first.scrollIntoView({behavior:"smooth",block:"center"}); setTimeout(function(){ try{ first.focus({preventScroll:true}); }catch(e){ first.focus(); } },350); }
+    else{ var f=$("rgLeadForm"); if(f.requestSubmit) f.requestSubmit(); else $("rgLeadBtn").click(); }
   });
   $("rgSkipLead").addEventListener("click",function(){ track("rg_lead_skip"); showResult(); });
 
@@ -526,7 +590,6 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgClubTitle").textContent="Book "+(state.name?esc(state.name)+"'s":"a")+" free class in the "+L.name;
     renderDates();
     $("rgBookContact").hidden=!!state.lead;
-    $("rgWaOnly").hidden=!(state.lead&&!state.lead.wa);
     track("rg_result",{level:state.levelKey}); confetti(); chime();
   }
   function renderDates(){
@@ -545,18 +608,22 @@ body:has(.amf-rg){background:#FBF6EC}
     var err=$("rgBookErr"); err.hidden=true;
     function fail(msg,id){ err.textContent=msg; err.hidden=false; if(id){ $(id).setAttribute("aria-invalid","true"); $(id).focus(); } }
     if(!state.date) return fail("Please pick a date for the free class.");
-    var name,email,wa;
-    if(state.lead){ name=state.lead.name; email=state.lead.email; wa=state.lead.wa||cleanPhone($("rgBWhatsApp2").value); if(!state.lead.wa&&!validPhone(wa)) return fail("Please check the WhatsApp number, with the country code (e.g. +971).","rgBWhatsApp2"); }
+    ["rgBName","rgBEmail","rgBLang","rgCcB","rgPhoneB"].forEach(function(id){ $(id).removeAttribute("aria-invalid"); });
+    var name,email,lang;
+    if(state.lead){ name=state.lead.name; email=state.lead.email; lang=state.lead.lang; }
     else{
-      name=$("rgBName").value.trim(); email=$("rgBEmail").value.trim(); wa=cleanPhone($("rgBWhatsApp").value);
+      name=$("rgBName").value.trim(); email=$("rgBEmail").value.trim(); lang=$("rgBLang").value;
       if(!name) return fail("Please add your first name.","rgBName");
       if(!validEmail(email)) return fail("Please check your email address.","rgBEmail");
-      if(!validPhone(wa)) return fail("Please check the WhatsApp number, with the country code (e.g. +971).","rgBWhatsApp");
+      if(!lang) return fail("Please choose your child's first language.","rgBLang");
     }
+    var ph=fullPhone("B");
+    if(ph.err){ if(ph.field==="rgCcB") $("rgCcB").parentNode.classList.add("bad"); return fail(ph.err,ph.field); }
+    var wa=ph.number;
     var tz=""; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""; }catch(e){}
     var btn=$("rgBookBtn"); btn.disabled=true; btn.textContent="Booking…";
     var props=readingProps();
-    props.child_name=state.name||"(not given)"; props.child_age=state.age; props.children_count=1; props.trial_class=state.date; props.whatsapp=wa||undefined; props.arabic_at_home=state.home||undefined;
+    props.child_name=state.name||"(not given)"; props.child_age=state.age; props.children_count=1; props.trial_class=state.date; props.whatsapp=wa; props.child_first_language=lang; props.arabic_at_home=state.home||undefined;
     props.parent_time_zone=tz; props.club_booked_at=new Date().toISOString(); props.club_source="Reading game booking"; props.heard_about="Reading game";
     props.club_utm_source=UTM.source; props.club_utm_medium=UTM.medium; props.club_utm_campaign="reading_test"; props.club_utm_content="game_"+state.levelKey;
     save("booked",{name:state.name,date:state.date,level:state.levelKey});
@@ -567,7 +634,7 @@ body:has(.amf-rg){background:#FBF6EC}
     function go(){
       if(sent) return; sent=true;
       // Same store contact form as the club page, so you get the usual booking email
-      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Free trial class (reading game)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Trial class]":state.date,"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Children]":"1","contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Reading game ("+UTM.source+")"};
+      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Free trial class (reading game)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Child first language]":lang,"contact[Trial class]":state.date,"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Children]":"1","contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Reading game ("+UTM.source+")"};
       f.innerHTML=""; Object.keys(fields).forEach(function(k){ var i=document.createElement("input"); i.type="hidden"; i.name=k; i.value=fields[k]||""; f.appendChild(i); });
       try{ f.submit(); }catch(e){ showDone(); }
     }
