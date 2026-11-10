@@ -34,3 +34,9 @@ and the key is added to AUDIO_KEYS in game.html. Clips play first; the phone's A
 fallback (iPhone mutes it in silent mode, so a tip appears under the speaker).
 Lead step fields: parent first name, email, child's first language. WhatsApp is asked at booking
 with a country-code picker (guessed from the time zone, any country).
+
+Hosting (Nov 10): jsDelivr refuses files from this repo at random because the repo is over its 50 MB
+limit (product videos). So the live page loads everything from Shopify Files instead:
+- clips: cdn.shopify.com/.../files/amf-rg-<key>.mp3 (copies of audio/*.mp3)
+- script: a versioned copy of rg.js uploaded to Shopify Files (amf-reading-game-vN.js); bump N on every change
+  and update the script tag in the page body.

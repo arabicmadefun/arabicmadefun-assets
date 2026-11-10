@@ -341,7 +341,7 @@ body:has(.amf-rg){background:#FBF6EC}
   // ---------- content ----------
   // Recorded clips: put <key>.mp3 in audio/ next to rg.js and list the key in AUDIO_KEYS.
   var AUDIO_KEYS=["l_ba","l_ta","l_mim","l_sin","w_bab","w_qitt","w_bayt","s_cat","p_ahsant","p_labas"];
-  var AUDIO_BASE=(function(){ try{ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/rg\.js.*$/,"audio/"):""; }catch(e){ return ""; } })();
+  var AUDIO_BASE="https://cdn.shopify.com/s/files/1/0871/0235/7754/files/amf-rg-"; // clips live in Shopify Files as amf-rg-<key>.mp3
   var CLIPS={}; AUDIO_KEYS.forEach(function(k){ CLIPS[k]=AUDIO_BASE+k+".mp3"; });
   var IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
   var PICS={{PICS_JSON}};
