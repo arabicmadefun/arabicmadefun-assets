@@ -29,7 +29,7 @@ Events (Hotjar + Shopify custom events): rg_start, rg_pass, rg_finished, rg_lead
 rg_lead_submit, rg_lead_skip, rg_result, rg_book_submit, rg_booked, rg_whatsapp, rg_share.
 Meta custom events: ReadingGameLead, ReadingGameTrialBooked.
 
-Audio: recorded clips go in `audio/<key>.mp3` (keys: l_ba l_ta l_mim l_sin w_bab w_qitt w_bayt s_cat)
+Audio: recorded clips go in `audio/<key>.mp3` (keys: l_ba l_ta l_mim l_sin w_bab w_qitt w_bayt s_cat p_ahsant p_labas; owner's voice, recorded Nov 10, split from one memo, loudness-normalized to -16 LUFS)
 and the key is added to AUDIO_KEYS in game.html. Clips play first; the phone's Arabic voice is the
 fallback (iPhone mutes it in silent mode, so a tip appears under the speaker).
 Lead step fields: parent first name, email, child's first language. WhatsApp is asked at booking

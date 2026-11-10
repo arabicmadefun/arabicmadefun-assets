@@ -340,7 +340,7 @@ body:has(.amf-rg){background:#FBF6EC}
 
   // ---------- content ----------
   // Recorded clips: put <key>.mp3 in audio/ next to rg.js and list the key in AUDIO_KEYS.
-  var AUDIO_KEYS=[];
+  var AUDIO_KEYS=["l_ba","l_ta","l_mim","l_sin","w_bab","w_qitt","w_bayt","s_cat","p_ahsant","p_labas"];
   var AUDIO_BASE=(function(){ try{ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/rg\.js.*$/,"audio/"):""; }catch(e){ return ""; } })();
   var CLIPS={}; AUDIO_KEYS.forEach(function(k){ CLIPS[k]=AUDIO_BASE+k+".mp3"; });
   var IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
@@ -383,12 +383,21 @@ body:has(.amf-rg){background:#FBF6EC}
       if(IOS&&!soundHintShown){ soundHintShown=true; soundHelp(); }
     }catch(e){ soundHelp(); }
   }
+  function stopAll(){ Object.keys(clipCache).forEach(function(k){ try{ clipCache[k].pause(); }catch(e){} }); try{ window.speechSynthesis&&window.speechSynthesis.cancel(); }catch(e){} }
+  function playKey(k,done){
+    var url=CLIPS[k]; if(!url){ if(done) done(); return; }
+    try{
+      stopAll(); var a=clipCache[k]||(clipCache[k]=new Audio(url)); a.currentTime=0;
+      if(done){ var fired=false, fin=function(){ if(fired) return; fired=true; a.removeEventListener("ended",fin); done(); }; a.addEventListener("ended",fin); setTimeout(fin,3200); }
+      var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ if(done) done(); });
+    }catch(e){ if(done) done(); }
+  }
   function speak(item,btn){
     if(btn){ btn.classList.add("playing"); setTimeout(function(){btn.classList.remove("playing");},1400); }
     var url=CLIPS[item.key];
     if(url){
       try{
-        var a=clipCache[item.key]||(clipCache[item.key]=new Audio(url)); a.currentTime=0;
+        stopAll(); var a=clipCache[item.key]||(clipCache[item.key]=new Audio(url)); a.currentTime=0;
         var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ speakVoice(item); });
         return;
       }catch(e){}
@@ -469,15 +478,16 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
-    state.tried[state.round]++; state.score[state.round]++; addStar(); chime();
+    state.tried[state.round]++; state.score[state.round]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250);
     var r=ROUNDS[state.round]; $("rgReadGuide").innerHTML=bubble(r.who,CHEERS[Math.floor(Math.random()*CHEERS.length)],"أَحْسَنْت!");
     setTimeout(nextItem,650);
   });
   $("rgPassBtn").addEventListener("click",function(){
     state.tried[state.round]++; state.passes++; track("rg_pass",{round:ROUNDS[state.round].name});
-    var r=ROUNDS[state.round], it=r.items[state.item]; speak(it); $("rgPic").classList.remove("hide");
+    var r=ROUNDS[state.round], it=r.items[state.item]; $("rgPic").classList.remove("hide");
+    if(CLIPS.p_labas&&CLIPS[it.key]){ playKey("p_labas",function(){ speak(it); }); } else { speak(it); }
     $("rgReadGuide").innerHTML=bubble(r.who,PASS_SAY[state.passes%PASS_SAY.length],"لَا بَأْس");
-    setTimeout(nextItem,1600);
+    setTimeout(nextItem,CLIPS.p_labas?(it.key==="s_cat"?5600:4300):1600);
   });
 
   // ---------- tracing ----------
@@ -509,7 +519,7 @@ body:has(.amf-rg){background:#FBF6EC}
   dcv.addEventListener("pointermove",function(e){ if(!drawing) return; e.preventDefault(); var p=pos(e),on=onLetter(p.x,p.y); dctx.lineCap="round"; dctx.lineJoin="round"; dctx.lineWidth=Math.max(12,size*0.045); dctx.strokeStyle=on?"#F2B035":"rgba(233,118,91,.55)"; dctx.beginPath(); dctx.moveTo(last.x,last.y); dctx.lineTo(p.x,p.y); dctx.stroke(); if(on) cover(p.x,p.y); if(!on&&wasOn) offAlert(); if(on&&!wasOn) $("rgTraceSay").textContent="Yes! Keep going on the letter."; wasOn=on; last=p; });
   ["pointerup","pointercancel","pointerleave"].forEach(function(t){ dcv.addEventListener(t,function(){ drawing=false; }); });
   function traceSuccess(){ addStar(); chime(); confetti(); state.traced=true; $("rgTraceSay").textContent="Wow, perfect tracing! Tap Finish, or try another letter."; }
-  Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.addEventListener("click",function(){ Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(x){x.setAttribute("aria-pressed","false");}); b.setAttribute("aria-pressed","true"); cur=b.getAttribute("data-l"); speak({say:{"ب":"باء","ت":"تاء","م":"ميم","س":"سين"}[cur],key:"t_"+cur}); $("rgTraceSay").textContent="Trace it! Start at the green dot and stay on the letter."; setupTrace(); }); });
+  Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.addEventListener("click",function(){ Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(x){x.setAttribute("aria-pressed","false");}); b.setAttribute("aria-pressed","true"); cur=b.getAttribute("data-l"); speak({say:{"ب":"باء","ت":"تاء","م":"ميم","س":"سين"}[cur],key:{"ب":"l_ba","ت":"l_ta","م":"l_mim","س":"l_sin"}[cur]}); $("rgTraceSay").textContent="Trace it! Start at the green dot and stay on the letter."; setupTrace(); }); });
   $("rgClearBtn").addEventListener("click",function(){ setupTrace(); $("rgTraceSay").textContent="Let's try again. Start at the green dot!"; });
   $("rgTraceDone").addEventListener("click",finishGame);
   $("rgTracePass").addEventListener("click",function(){ track("rg_pass",{round:"Tracing"}); finishGame(); });
