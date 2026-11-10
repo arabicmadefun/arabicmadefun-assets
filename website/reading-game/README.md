@@ -16,8 +16,8 @@ in-page trial booking → confirmation.
 
 Data:
 - Lead step: Klaviyo profile (reading_level, reading_scores, child_age, child_name, whatsapp,
-  rg_utm_*) + subscription to the sampler list SPM2nR (custom_source "Reading game"), which starts
-  the sampler welcome flow (the free 10-page pack promised on the lead step).
+  rg_utm_*) + subscription to its own list RCTUtB "Reading Test leads (Sami & Mya game)"
+  (custom_source "Reading game"). No flow on that list yet.
 - Booking: same as the Arabic Club form: Klaviyo profile with the club fields (trial_class,
   child_name, child_age, whatsapp, arabic_at_home, parent_time_zone, club_booked_at,
   club_source "Reading game booking", club_utm_source/medium, club_utm_campaign=reading_test,
