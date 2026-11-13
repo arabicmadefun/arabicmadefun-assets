@@ -163,7 +163,7 @@ body:has(.amf-rg){background:#FBF6EC}
   <section class="rg-screen" id="rg-start">
     <div class="rg-hero">{{HERO}}</div>
     <h1 class="rg-h1">Votre enfant sait-il lire l'arabe ? Réponse en 3 minutes</h1>
-    <p class="rg-lead">Un jeu de lecture gratuit avec Sami &amp; Mya, des premières lettres jusqu'au texte sans voyelles. Votre enfant lit, vérifie en touchant l'écran, et peut passer ce qui est trop difficile. Pas besoin de parler arabe.</p>
+    <p class="rg-lead">Un jeu de lecture gratuit avec Sami &amp; Mya, des premières lettres jusqu'au texte sans voyelles. Votre enfant lit et répond « J'ai trouvé » ou « Je ne sais pas ». Pas besoin de parler arabe.</p>
     <p class="rg-q" id="rgAgeQ">Quel âge a votre enfant ?</p>
     <div class="rg-ages" id="rgAges" role="group" aria-labelledby="rgAgeQ">
       <button type="button" aria-pressed="false" data-age="4-5">4–5</button><button type="button" aria-pressed="false" data-age="6-7">6–7</button><button type="button" aria-pressed="false" data-age="8-9">8–9</button><button type="button" aria-pressed="false" data-age="10-11">10–11</button><button type="button" aria-pressed="false" data-age="12+">12+</button>
@@ -173,7 +173,7 @@ body:has(.amf-rg){background:#FBF6EC}
     </label>
     <p class="rg-err" id="rgStartErr" role="alert" hidden>Touchez l'âge de votre enfant pour commencer.</p>
     <button class="rg-btn go" id="rgStartBtn" type="button">Commencer le jeu</button>
-    <p class="rg-micro">Activez le son · Gratuit · Environ 3 minutes</p>
+    <p class="rg-micro">Gratuit · Environ 3 minutes</p>
   </section>
 
   <!-- 2. READ -->
@@ -188,10 +188,10 @@ body:has(.amf-rg){background:#FBF6EC}
       <button class="rg-speak" id="rgSpeakBtn" type="button"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="#fff"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></span>Écouter pour vérifier</button>
       <p class="rg-sound" id="rgNoVoice" role="status" hidden>Pas de son ? Désactivez le mode silencieux et montez le volume. Votre enfant peut continuer à jouer quand même.</p>
       <div class="rg-answers" id="rgAnswers">
-        <button class="rg-btn yes" id="rgYesBtn" type="button">Je l'ai lu !</button>
-        <button class="rg-btn pass" id="rgPassBtn" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>Passer</button>
+        <button class="rg-btn yes" id="rgYesBtn" type="button">J'ai trouvé !</button>
+        <button class="rg-btn pass" id="rgPassBtn" type="button">Je ne sais pas</button>
       </div>
-      <p class="rg-hint" id="rgReadHint">Trop difficile ? Touchez <b>Passer</b>. Ça nous aide aussi !</p>
+      <p class="rg-hint" id="rgReadHint">Tu ne sais pas ? Touche <b>Je ne sais pas</b>. Ça nous aide aussi !</p>
     </div>
   </section>
 
@@ -209,7 +209,7 @@ body:has(.amf-rg){background:#FBF6EC}
         <div class="rg-alert" id="rgOffAlert"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff"/><path d="M12 6v8M12 17v1" stroke="#E9765B" stroke-width="3" stroke-linecap="round"/></svg>Oups ! Reviens sur la lettre</div>
       </div>
       <div class="rg-meter"><i id="rgMeter"></i></div>
-      <div class="rg-row2"><button class="rg-btn pass" id="rgTracePass" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>Passer</button><button class="rg-btn go" id="rgTraceDone" type="button">Terminer</button></div>
+      <div class="rg-row2"><button class="rg-btn pass" id="rgTracePass" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>Je ne sais pas</button><button class="rg-btn go" id="rgTraceDone" type="button">Terminer</button></div>
       <button class="rg-textbtn" id="rgClearBtn" type="button">Effacer et recommencer</button>
     </div>
   </section>
@@ -404,7 +404,7 @@ body:has(.amf-rg){background:#FBF6EC}
     }catch(e){ soundHelp(); }
   }
   function stopAll(){ Object.keys(clipCache).forEach(function(k){ try{ clipCache[k].pause(); }catch(e){} }); try{ window.speechSynthesis&&window.speechSynthesis.cancel(); }catch(e){} }
-  function playKey(k,done){
+  function playKey(k,done){ if(MUTE){ if(done) done(); return; }
     var url=CLIPS[k]; if(!url){ if(done) done(); return; }
     try{
       stopAll(); var a=clipCache[k]||(clipCache[k]=new Audio(url)); a.currentTime=0;
@@ -412,7 +412,8 @@ body:has(.amf-rg){background:#FBF6EC}
       var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ if(done) done(); });
     }catch(e){ if(done) done(); }
   }
-  function speak(item,btn){
+  var MUTE=true; // Nov 13: sound off in the French version (owner request)
+  function speak(item,btn){ if(MUTE) return;
     if(btn){ btn.classList.add("playing"); setTimeout(function(){btn.classList.remove("playing");},1400); }
     var url=CLIPS[item.key];
     if(url){
@@ -424,9 +425,9 @@ body:has(.amf-rg){background:#FBF6EC}
     }
     speakVoice(item);
   }
-  function warmClips(){ Object.keys(CLIPS).forEach(function(k){ try{ var a=clipCache[k]||(clipCache[k]=new Audio(CLIPS[k])); a.preload="auto"; a.load(); }catch(e){} }); }
+  function warmClips(){ if(MUTE) return; Object.keys(CLIPS).forEach(function(k){ try{ var a=clipCache[k]||(clipCache[k]=new Audio(CLIPS[k])); a.preload="auto"; a.load(); }catch(e){} }); }
   var actx=null;
-  function tone(f,d,t){ try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); var o=actx.createOscillator(),g=actx.createGain(); o.type=t||"sine"; o.frequency.value=f; g.gain.value=0.08; o.connect(g); g.connect(actx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d); o.stop(actx.currentTime+d);}catch(e){} }
+  function tone(f,d,t){ if(MUTE) return; try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); var o=actx.createOscillator(),g=actx.createGain(); o.type=t||"sine"; o.frequency.value=f; g.gain.value=0.08; o.connect(g); g.connect(actx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d); o.stop(actx.currentTime+d);}catch(e){} }
   function chime(){ tone(784,.18); setTimeout(function(){tone(1046,.25);},120); }
 
   // ---------- helpers ----------
@@ -485,8 +486,8 @@ body:has(.amf-rg){background:#FBF6EC}
     var isText=state.round===3;
     var big=$("rgBigText"); big.textContent=it.ar; big.classList.toggle("sent",state.round===2); big.classList.toggle("txt",isText);
     var pic=$("rgPic"); if(isText){ pic.innerHTML=""; pic.hidden=true; } else { pic.hidden=false; pic.innerHTML=PICS[it.pic]+'<small>'+it.en+'</small>'; pic.classList.add("hide"); }
-    $("rgSpeakBtn").hidden=isText; $("rgYesBtn").hidden=isText; $("rgAnswers").style.gridTemplateColumns=isText?"1fr":"";
-    $("rgReadHint").innerHTML=isText?it.hint:"Trop difficile ? Touchez <b>Passer</b>. Ça nous aide aussi !";
+    $("rgSpeakBtn").hidden=true; pic.hidden=true; $("rgYesBtn").hidden=isText; $("rgAnswers").style.gridTemplateColumns=isText?"1fr":"1fr 1fr";
+    $("rgReadHint").innerHTML=isText?it.hint:"Tu ne sais pas ? Touche <b>Je ne sais pas</b>. Ça nous aide aussi !";
     var tq=$("rgTextQ"), ch=$("rgChoices"); tq.hidden=!isText; ch.hidden=!isText; ch.removeAttribute("aria-disabled"); ch.innerHTML="";
     if(isText){ tq.textContent=it.q; it.choices.forEach(function(c,i){ var b=document.createElement("button"); b.type="button"; b.lang="ar"; b.textContent=c; b.addEventListener("click",function(){ answerText(i,b); }); ch.appendChild(b); }); }
     if(state.item===0){ var hello=r.hello; if(state.round===0&&state.name) hello="Salut "+esc(state.name)+" ! "+hello; $("rgReadGuide").innerHTML=bubble(r.who,hello,r.helloAr); }
@@ -498,7 +499,7 @@ body:has(.amf-rg){background:#FBF6EC}
     if(good){ state.score[3]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250); $("rgReadGuide").innerHTML=bubble(r.who,CHEERS[Math.floor(Math.random()*CHEERS.length)],"أَحْسَنْت!"); }
     else { $("rgReadGuide").innerHTML=bubble(r.who,"Pas grave ! La bonne réponse est en vert.","لَا بَأْس"); }
     track("rg_text_answer",{item:state.item,ok:good});
-    setTimeout(nextItem,good?1100:2200);
+    setTimeout(nextItem,good?700:1500);
   }
   function startRound(i){ state.round=i; state.item=0; show("rg-read",1+ (i>0?1:0)); renderItem(); }
   function nextItem(){
@@ -511,17 +512,16 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
-    state.tried[state.round]++; state.score[state.round]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250);
+    state.tried[state.round]++; state.score[state.round]++; addStar();
     var r=ROUNDS[state.round]; $("rgReadGuide").innerHTML=bubble(r.who,CHEERS[Math.floor(Math.random()*CHEERS.length)],"أَحْسَنْت!");
-    setTimeout(nextItem,650);
+    nextItem();
   });
   $("rgPassBtn").addEventListener("click",function(){
+    // "Je ne sais pas": counted as tried, not known, then straight to the next card
     state.tried[state.round]++; state.passes++; track("rg_pass",{round:ROUNDS[state.round].name});
-    var r=ROUNDS[state.round], it=r.items[state.item], ch; $("rgPic").classList.remove("hide");
-    if(state.round===3){ ch=$("rgChoices"); ch.setAttribute("aria-disabled","true"); $("rgReadGuide").innerHTML=bubble(r.who,"Pas de souci, ce défi est pour les grands lecteurs !","لَا بَأْس"); setTimeout(nextItem,1400); return; }
-    if(CLIPS.p_labas&&CLIPS[it.key]){ playKey("p_labas",function(){ speak(it); }); } else { speak(it); }
-    $("rgReadGuide").innerHTML=bubble(r.who,PASS_SAY[state.passes%PASS_SAY.length],"لَا بَأْس");
-    setTimeout(nextItem,CLIPS.p_labas?(it.key==="s_cat"?5600:4300):1600);
+    var r=ROUNDS[state.round]; if(state.round===3) $("rgChoices").setAttribute("aria-disabled","true");
+    $("rgReadGuide").innerHTML=bubble(r.who,"Pas de souci, on continue !","لَا بَأْس");
+    nextItem();
   });
 
   // ---------- tracing ----------

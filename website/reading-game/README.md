@@ -43,7 +43,7 @@ limit (product videos). So the live page loads everything from Shopify Files ins
 
 ## French version (Nov 13, 2026)
 `game-fr.html` -> `rg-fr.js` (build.py builds both). Live page: /pages/jeu-de-lecture-arabe (short link /test-lecture),
-script in Shopify Files as `amf-reading-game-fr-vN.js` (current v1).
+script in Shopify Files as `amf-reading-game-fr-vN.js` (current v2).
 Differences from English: French text, age chips 4-5 / 6-7 / 8-9 / 10-11 / 12+, a 4th round "Texte"
 (2 short texts with a 3-choice comprehension question: 1st with vowels, 2nd without; shown only if the sentence was read),
 two extra levels (reader = "Groupe Lecteurs", advanced = "Groupe Lecteurs confirmés").
@@ -51,3 +51,5 @@ No trial booking: the result screen is a waitlist for a francophone group (prefe
 interested kids, WhatsApp). Lead + waitlist go to Klaviyo list VD67XE (fr_waitlist, fr_preferred_slot,
 fr_interested_kids, reading_game_lang=fr) and the store contact form. Never subscribes to X9QTYr (trial bookings).
 Texts have no recorded clips (t_1, t_2): Pass falls back to the phone voice.
+FR v2 (Nov 13): no sound at all (MUTE=true: no clips, no phone voice, no tones), no speaker button and no pictures;
+cards answer with "J'ai trouvé !" (known) or "Je ne sais pas" (tried, not known) and go straight to the next card.
