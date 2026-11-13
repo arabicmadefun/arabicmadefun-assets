@@ -91,6 +91,17 @@ body:has(.amf-rg){background:#FBF6EC}
 .rg-letters{display:flex;gap:10px;justify-content:center}
 .amf-rg .rg-letters button{width:52px;height:52px;border-radius:16px;border:3px solid var(--ink);background:var(--white);font-family:var(--arabic);font-weight:700;font-size:28px;line-height:1;color:var(--ink)}
 .amf-rg .rg-letters button[aria-pressed="true"]{background:var(--saffron)}
+.rg-steps{display:flex;gap:10px;justify-content:center}
+.rg-steps span{position:relative;width:48px;height:48px;border-radius:14px;border:3px solid var(--line);background:var(--white);font-family:var(--arabic);font-weight:700;font-size:26px;line-height:44px;text-align:center;color:var(--ink-soft)}
+.rg-steps span.now{border-color:var(--ink);background:var(--saffron);color:var(--ink);transform:scale(1.12)}
+.rg-steps span.ok{border-color:var(--ink);background:var(--mint);color:var(--ink)}
+.rg-steps span.skip{opacity:.45}
+.rg-steps span.ok:after{content:"✓";position:absolute;right:-8px;top:-10px;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font:800 12px/20px var(--display)}
+.rg-flash{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(251,246,236,.92);border-radius:22px;font-weight:800;font-size:26px;color:var(--ink);z-index:3;opacity:0;pointer-events:none;transition:opacity .2s}
+.rg-flash.show{opacity:1}
+.rg-flash .ar{font-size:64px;line-height:1.3}
+.amf-rg .rg-field textarea{font:inherit;font-weight:600;font-size:17px;border:3px solid var(--ink);border-radius:14px;padding:12px 14px;background:var(--white);color:var(--ink);width:100%;min-height:84px;resize:vertical;box-shadow:none}
+.amf-rg .rg-slots .rg-chip.wide{grid-column:1/-1}
 .rg-row2{display:flex;gap:12px;align-self:stretch}
 .rg-row2>*{flex:1}
 /* checking */
@@ -199,19 +210,18 @@ body:has(.amf-rg){background:#FBF6EC}
 
   <!-- 3. TRACE -->
   <section class="rg-screen" id="rg-trace" hidden>
-    <div class="rg-guide">{{MYA_HEAD}}<div class="rg-bubble" id="rgTraceSay">Premier jeu ! Trace la lettre avec ton doigt. Commence au point vert et reste sur la lettre.</div></div>
+    <div class="rg-guide">{{MYA_HEAD}}<div class="rg-bubble" id="rgTraceSay">Premier jeu : 4 lettres à tracer ! Commence au point vert, reste sur la lettre et n'oublie pas les points.</div></div>
     <div class="rg-card">
-      <div class="rg-label"><span class="rg-pill" style="background:var(--coral-tint)">À tracer</span><span class="rg-count" id="rgTracePct">0%</span></div>
-      <div class="rg-letters" role="group" aria-label="Choisis une lettre">
-        <button type="button" aria-pressed="true" data-l="ب">ب</button><button type="button" aria-pressed="false" data-l="ت">ت</button><button type="button" aria-pressed="false" data-l="م">م</button><button type="button" aria-pressed="false" data-l="س">س</button>
-      </div>
+      <div class="rg-label"><span class="rg-pill" id="rgTracePill" style="background:var(--coral-tint)">Lettre 1 sur 4</span><span class="rg-count" id="rgTracePct">0%</span></div>
+      <div class="rg-steps" id="rgTraceSteps" aria-hidden="true"><span>ب</span><span>ت</span><span>م</span><span>س</span></div>
       <div class="rg-tracebox">
         <canvas id="rgGuideCv" aria-hidden="true"></canvas>
         <canvas id="rgDrawCv" aria-label="Zone de tracé : trace la lettre avec ton doigt"></canvas>
+        <div class="rg-flash" id="rgTraceFlash" aria-live="polite"></div>
         <div class="rg-alert" id="rgOffAlert"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff"/><path d="M12 6v8M12 17v1" stroke="#E9765B" stroke-width="3" stroke-linecap="round"/></svg>Oups ! Reviens sur la lettre</div>
       </div>
       <div class="rg-meter"><i id="rgMeter"></i></div>
-      <div class="rg-row2"><button class="rg-btn pass" id="rgTracePass" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>Je ne sais pas</button><button class="rg-btn go" id="rgTraceDone" type="button">Terminer</button></div>
+      <button class="rg-btn pass" id="rgTracePass" type="button">Je ne sais pas, lettre suivante</button>
       <button class="rg-textbtn" id="rgClearBtn" type="button">Effacer et recommencer</button>
     </div>
   </section>
@@ -263,6 +273,7 @@ body:has(.amf-rg){background:#FBF6EC}
         <div style="background:#E6E8F8"><span>Phrase</span><b id="rgScS">–</b></div>
         <div style="background:var(--coral-tint)"><span>Texte</span><b id="rgScT">–</b></div>
         <div style="background:#E3F1F7"><span>Vocabulaire</span><b id="rgScV">–</b></div>
+        <div style="background:#F3E3F0"><span>Tracé</span><b id="rgScTr">–</b></div>
       </div>
       <div class="rg-next"><b>À la maison</b><span id="rgPractice"></span></div>
     </div>
@@ -279,7 +290,7 @@ body:has(.amf-rg){background:#FBF6EC}
         </ul>
         <p class="rg-q" id="rgSlotQ">Quel créneau vous arrangerait ? (heure du Maroc)</p>
         <div class="rg-slots" id="rgSlots" role="radiogroup" aria-labelledby="rgSlotQ">
-          <button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Mercredi après-midi">Mercredi<small>après-midi</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Samedi matin">Samedi<small>matin</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Dimanche matin">Dimanche<small>matin</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Autre créneau">Autre<small>à voir ensemble</small></button>
+          <button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Mercredi après-midi">Mercredi<small>après-midi</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Vendredi après-midi">Vendredi<small>après-midi</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Samedi matin">Samedi<small>matin</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Dimanche matin">Dimanche<small>matin</small></button><button type="button" class="rg-chip wide" role="radio" aria-checked="false" data-v="Autre créneau">Autre créneau<small>à voir ensemble</small></button>
         </div>
         <p class="rg-q" id="rgHomeQ">Quelqu'un parle-t-il arabe à la maison ?</p>
         <div class="rg-chips3" id="rgHome" role="radiogroup" aria-labelledby="rgHomeQ">
@@ -295,6 +306,7 @@ body:has(.amf-rg){background:#FBF6EC}
           <label class="rg-field" for="rgBLang">Langue maternelle de l'enfant<select id="rgBLang" class="rg-select"><option value="">Choisir</option><option>Français</option><option>Arabe</option><option>Anglais</option><option>Néerlandais</option><option>Allemand</option><option>Espagnol</option><option>Italien</option><option>Turc</option><option>Autre</option></select></label>
         </div>
         <div class="rg-field"><label for="rgCcB">Numéro WhatsApp <small>(pour vous prévenir quand le groupe ouvre)</small></label><div class="rg-phone"><span class="rg-ccwrap"><span class="rg-ccshow" id="rgCcShowB" aria-hidden="true">Indicatif</span><select id="rgCcB" class="rg-cc" aria-label="Indicatif du pays"></select></span><input id="rgPhoneB" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Numéro" maxlength="20" aria-label="Numéro WhatsApp sans l'indicatif"></div></div>
+        <label class="rg-field" for="rgNote">Un mot pour nous ? <small>(facultatif : une question, un besoin particulier…)</small><textarea id="rgNote" maxlength="600" placeholder="Ex. : ma fille a déjà fait 2 ans d'arabe à l'école"></textarea></label>
         <p class="rg-err" id="rgBookErr" role="alert" hidden></p>
         <button class="rg-btn club" id="rgBookBtn" type="button">Rejoindre la liste d'attente</button>
         <p class="rg-micro">Gratuit · Sans engagement · Groupes de 6 enfants maximum</p>
@@ -542,7 +554,8 @@ body:has(.amf-rg){background:#FBF6EC}
 
   // ---------- tracing ----------
   var gcv=$("rgGuideCv"),dcv=$("rgDrawCv"),gctx=gcv.getContext("2d"),dctx=dcv.getContext("2d");
-  var size=0,mask=null,cells=null,total=0,covered=0,drawing=false,last=null,cur="ب",alertT=null,CELL=10,wasOn=true,doneShown=false;
+  var TRACE=["ب","ت","م","س"], ti=0, busy=false;
+  var size=0,mask=null,cells=null,total=0,covered=0,comp=null,compTot=null,compCov=null,drawing=false,last=null,cur="ب",alertT=null,CELL=5,wasOn=true,doneShown=false,dotHint=false;
   var FONT=function(){ return '700 '+Math.round(size*0.72)+'px "Noto Naskh Arabic","Geeza Pro",serif'; };
   function drawLetter(ctx,color,sw){ ctx.save(); ctx.font=FONT(); ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.direction="rtl"; ctx.fillStyle=color; ctx.strokeStyle=color; ctx.lineJoin="round"; if(sw){ ctx.lineWidth=sw; ctx.strokeText(cur,size/2,size*0.47);} ctx.fillText(cur,size/2,size*0.47); ctx.restore(); }
   function setupTrace(){
@@ -554,27 +567,51 @@ body:has(.amf-rg){background:#FBF6EC}
     var m=document.createElement("canvas"); m.width=size; m.height=size; var mc=m.getContext("2d",{willReadFrequently:true});
     var tol=Math.max(14,size*0.05); drawLetter(mc,"#000",tol*2); mask=mc.getImageData(0,0,size,size).data;
     mc.clearRect(0,0,size,size); drawLetter(mc,"#000",0); var core=mc.getImageData(0,0,size,size).data;
+    var ink=function(x,y){ x=Math.min(size-1,x|0); y=Math.min(size-1,y|0); return core[(y*size+x)*4+3]>100; };
     cells={}; total=0; covered=0;
-    for(var y=0;y<size;y+=CELL){ for(var x=0;x<size;x+=CELL){ var cx=Math.min(size-1,x+CELL/2|0),cy=Math.min(size-1,y+CELL/2|0); if(core[(cy*size+cx)*4+3]>100){ cells[x+","+y]=false; total++; } } }
-    var sx=-1,sy=0; for(var k in cells){ var p=k.split(",").map(Number); if(p[0]>sx){sx=p[0];sy=p[1];} }
+    for(var y=0;y<size;y+=CELL){ for(var x=0;x<size;x+=CELL){ if(ink(x+2,y+2)||ink(x+1,y+1)||ink(x+4,y+1)||ink(x+1,y+4)||ink(x+4,y+4)){ cells[x+","+y]=false; total++; } } }
+    // Separate pieces of the letter (body, dots): every piece must be traced, dots included
+    comp={}; compTot=[]; compCov=[]; var n=0;
+    Object.keys(cells).forEach(function(k){ if(comp[k]!==undefined) return; var st=[k]; comp[k]=n; compTot[n]=0; compCov[n]=0;
+      while(st.length){ var c=st.pop(), q=c.split(",").map(Number); compTot[n]++;
+        [[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){ var nk=(q[0]+d[0]*CELL)+","+(q[1]+d[1]*CELL); if(cells[nk]!==undefined&&comp[nk]===undefined){ comp[nk]=n; st.push(nk); } }); }
+      n++; });
+    var big=0; for(var i=1;i<n;i++) if(compTot[i]>compTot[big]) big=i;
+    var sx=-1,sy=0; for(var k in cells){ if(comp[k]!==big) continue; var p=k.split(",").map(Number); if(p[0]>sx){sx=p[0];sy=p[1];} }
     if(sx>=0){ gctx.fillStyle="#5FB8A2"; gctx.beginPath(); gctx.arc(sx+CELL/2,sy+CELL/2,9,0,6.3); gctx.fill(); gctx.fillStyle="#22305A"; gctx.font="700 13px Outfit,sans-serif"; gctx.textAlign="center"; gctx.fillText("départ",Math.min(size-24,sx+CELL/2),sy-10); }
-    doneShown=false; updateMeter();
+    doneShown=false; dotHint=false; updateMeter();
   }
   function onLetter(x,y){ x|=0; y|=0; if(x<0||y<0||x>=size||y>=size) return false; return mask[(y*size+x)*4+3]>60; }
-  function cover(x,y){ var r=Math.max(12,size*0.04); for(var yy=y-r;yy<=y+r;yy+=CELL/2){ for(var xx=x-r;xx<=x+r;xx+=CELL/2){ var key=(Math.floor(xx/CELL)*CELL)+","+(Math.floor(yy/CELL)*CELL); if(cells[key]===false){ cells[key]=true; covered++; } } } updateMeter(); }
-  function updateMeter(){ var pct=total?Math.min(100,Math.round(covered/total*100/0.85)):0; $("rgMeter").style.width=pct+"%"; $("rgTracePct").textContent=pct+"%"; if(pct>=100&&!doneShown){ doneShown=true; traceSuccess(); } }
+  function cover(x,y){ var r=Math.max(12,size*0.04); for(var yy=y-r;yy<=y+r;yy+=CELL/2){ for(var xx=x-r;xx<=x+r;xx+=CELL/2){ var key=(Math.floor(xx/CELL)*CELL)+","+(Math.floor(yy/CELL)*CELL); if(cells[key]===false){ cells[key]=true; covered++; compCov[comp[key]]++; } } } updateMeter(); }
+  function piecesDone(){ for(var i=0;i<compTot.length;i++){ if(compCov[i]<Math.max(1,Math.ceil(compTot[i]*0.6))) return false; } return true; }
+  function updateMeter(){
+    var pct=total?Math.min(100,Math.round(covered/total*100/0.85)):0, all=piecesDone();
+    if(pct>=100&&!all) pct=95;
+    $("rgMeter").style.width=pct+"%"; $("rgTracePct").textContent=pct+"%";
+    if(pct>=95&&!all&&!dotHint&&covered>0){ dotHint=true; $("rgTraceSay").textContent=(cur==="س"||cur==="م")?"Presque ! Trace toute la lettre jusqu'au bout.":"Presque ! N'oublie pas "+(cur==="ت"?"les deux points":"le point")+" !"; }
+    if(pct>=100&&all&&!doneShown){ doneShown=true; traceSuccess(); }
+  }
   function offAlert(){ var a=$("rgOffAlert"); a.classList.remove("show"); void a.offsetWidth; a.classList.add("show"); tone(180,.18,"square"); try{ if(navigator.vibrate) navigator.vibrate(60);}catch(e){} $("rgTraceSay").textContent="Oups ! Reste sur la lettre, tu peux le faire !"; clearTimeout(alertT); alertT=setTimeout(function(){a.classList.remove("show");},900); }
   function pos(e){ var r=dcv.getBoundingClientRect(); return {x:(e.clientX-r.left)*size/r.width,y:(e.clientY-r.top)*size/r.height}; }
-  dcv.addEventListener("pointerdown",function(e){ e.preventDefault(); state.traceTried=true; try{dcv.setPointerCapture(e.pointerId);}catch(_){} drawing=true; last=pos(e); wasOn=onLetter(last.x,last.y); if(!wasOn) offAlert(); else cover(last.x,last.y); });
-  dcv.addEventListener("pointermove",function(e){ if(!drawing) return; e.preventDefault(); var p=pos(e),on=onLetter(p.x,p.y); dctx.lineCap="round"; dctx.lineJoin="round"; dctx.lineWidth=Math.max(12,size*0.045); dctx.strokeStyle=on?"#F2B035":"rgba(233,118,91,.55)"; dctx.beginPath(); dctx.moveTo(last.x,last.y); dctx.lineTo(p.x,p.y); dctx.stroke(); if(on) cover(p.x,p.y); if(!on&&wasOn) offAlert(); if(on&&!wasOn) $("rgTraceSay").textContent="Oui ! Continue sur la lettre."; wasOn=on; last=p; });
+  dcv.addEventListener("pointerdown",function(e){ if(busy) return; e.preventDefault(); state.traceTried=true; try{dcv.setPointerCapture(e.pointerId);}catch(_){} drawing=true; last=pos(e); wasOn=onLetter(last.x,last.y); if(!wasOn) offAlert(); else cover(last.x,last.y); });
+  dcv.addEventListener("pointermove",function(e){ if(!drawing||busy) return; e.preventDefault(); var p=pos(e),on=onLetter(p.x,p.y); dctx.lineCap="round"; dctx.lineJoin="round"; dctx.lineWidth=Math.max(12,size*0.045); dctx.strokeStyle=on?"#F2B035":"rgba(233,118,91,.55)"; dctx.beginPath(); dctx.moveTo(last.x,last.y); dctx.lineTo(p.x,p.y); dctx.stroke(); if(on) cover(p.x,p.y); if(!on&&wasOn) offAlert(); if(on&&!wasOn) $("rgTraceSay").textContent="Oui ! Continue sur la lettre."; wasOn=on; last=p; });
   ["pointerup","pointercancel","pointerleave"].forEach(function(t){ dcv.addEventListener(t,function(){ drawing=false; }); });
-  function traceSuccess(){ addStar(); chime(); confetti(); state.traced=true; $("rgTraceSay").textContent="Waouh, tracé parfait ! Touche Terminer, ou essaie une autre lettre."; }
-  Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.addEventListener("click",function(){ Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(x){x.setAttribute("aria-pressed","false");}); b.setAttribute("aria-pressed","true"); cur=b.getAttribute("data-l"); speak({say:{"ب":"باء","ت":"تاء","م":"ميم","س":"سين"}[cur],key:{"ب":"l_ba","ت":"l_ta","م":"l_mim","س":"l_sin"}[cur]}); $("rgTraceSay").textContent="Trace-la ! Commence au point vert et reste sur la lettre."; setupTrace(); }); });
-  $("rgClearBtn").addEventListener("click",function(){ setupTrace(); $("rgTraceSay").textContent="On recommence. Commence au point vert !"; });
-  $("rgTraceDone").addEventListener("click",function(){ startRound(0); });
-  $("rgTracePass").addEventListener("click",function(){ track("rg_pass",{round:"Tracé"}); startRound(0); });
-  function startTrace(){ show("rg-trace",1); var go=function(){ requestAnimationFrame(setupTrace); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
-  window.addEventListener("resize",function(){ if(!$("rg-trace").hidden) setupTrace(); });
+  function renderSteps(){ var sp=$("rgTraceSteps").children; for(var i=0;i<sp.length;i++){ sp[i].className = i<ti ? (state.traceRes[i]?"ok":"skip") : (i===ti?"now":""); } $("rgTracePill").textContent="Lettre "+(ti+1)+" sur "+TRACE.length; }
+  function loadLetter(){ cur=TRACE[ti]; busy=false; renderSteps(); $("rgClearBtn").hidden=false; requestAnimationFrame(setupTrace); }
+  function flash(html,ms,then){ var f=$("rgTraceFlash"); f.innerHTML=html; f.classList.add("show"); busy=true; drawing=false; setTimeout(function(){ f.classList.remove("show"); setTimeout(then,200); },ms); }
+  function nextLetter(ok){
+    state.traceRes[ti]=ok; if(ok) state.traceOk++;
+    var last=ti>=TRACE.length-1;
+    var head=ok?"Bravo !":"Pas grave !";
+    var html=last ? head+"<span style=\"font-size:18px;font-weight:700\">On passe à la lecture</span>" : head+"<span style=\"font-size:18px;font-weight:700\">Lettre suivante</span><span class=\"ar\">"+TRACE[ti+1]+"</span>";
+    renderSteps(); var sp=$("rgTraceSteps").children[ti]; sp.className=ok?"ok":"skip";
+    flash(html, ok?1300:900, function(){ if(last){ startRound(0); return; } ti++; $("rgTraceSay").textContent="Lettre "+(ti+1)+" sur "+TRACE.length+" : trace-la en commençant au point vert."; loadLetter(); });
+  }
+  function traceSuccess(){ addStar(); confetti(); state.traced=true; $("rgTraceSay").textContent="Bravo, tracé parfait !"; nextLetter(true); }
+  $("rgClearBtn").addEventListener("click",function(){ if(busy) return; setupTrace(); $("rgTraceSay").textContent="On recommence. Commence au point vert !"; });
+  $("rgTracePass").addEventListener("click",function(){ if(busy) return; track("rg_pass",{round:"Tracé",letter:cur}); state.passes++; $("rgTraceSay").textContent="Pas de souci !"; nextLetter(false); });
+  function startTrace(){ ti=0; state.traceOk=0; state.traceRes=[]; show("rg-trace",1); var go=function(){ loadLetter(); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
+  window.addEventListener("resize",function(){ if(!$("rg-trace").hidden&&!busy) setupTrace(); });
 
   // ---------- level ----------
   function computeLevel(){
@@ -586,7 +623,7 @@ body:has(.amf-rg){background:#FBF6EC}
     if(s[3]<2) return "reader";
     return "advanced";
   }
-  function scoreText(){ var s=state.score; return "Lettres "+s[0]+"/4 · Mots "+(state.tried[1]?s[1]+"/3":"non tenté")+" · Phrase "+(state.tried[2]?(s[2]?"oui":"pas encore"):"non tentée")+" · Texte "+(state.tried[3]?s[3]+"/2":"non tenté")+" · Vocabulaire "+(state.tried[4]?s[4]+"/5":"non tenté")+(state.traced?" · A tracé une lettre":""); }
+  function scoreText(){ var s=state.score; return "Lettres "+s[0]+"/4 · Mots "+(state.tried[1]?s[1]+"/3":"non tenté")+" · Phrase "+(state.tried[2]?(s[2]?"oui":"pas encore"):"non tentée")+" · Texte "+(state.tried[3]?s[3]+"/2":"non tenté")+" · Vocabulaire "+(state.tried[4]?s[4]+"/5":"non tenté")+" · Tracé "+(state.traceOk||0)+"/4"; }
 
   // ---------- checking moment → gate ----------
   function finishGame(){
@@ -607,7 +644,7 @@ body:has(.amf-rg){background:#FBF6EC}
     return fetch("https://a.klaviyo.com/client/"+path+"/?company_id="+KC,{method:"POST",keepalive:true,headers:{"Content-Type":"application/vnd.api+json","revision":REV},body:JSON.stringify(body)});
   }
   function readingProps(){
-    return {reading_level:state.levelKey,reading_level_name:LEVELS[state.levelKey].name,reading_scores:scoreText(),reading_passes:state.passes,reading_vocab:state.tried[4]?state.score[4]+"/5":undefined,reading_game_at:new Date().toISOString(),reading_game_lang:"fr",child_name:state.name||undefined,child_age:state.age,
+    return {reading_level:state.levelKey,reading_level_name:LEVELS[state.levelKey].name,reading_scores:scoreText(),reading_passes:state.passes,reading_trace:(state.traceOk||0)+"/4",reading_vocab:state.tried[4]?state.score[4]+"/5":undefined,reading_game_at:new Date().toISOString(),reading_game_lang:"fr",child_name:state.name||undefined,child_age:state.age,
       rg_utm_source:UTM.source,rg_utm_medium:UTM.medium,rg_utm_campaign:UTM.campaign,rg_utm_content:UTM.content||undefined};
   }
   $("rgLeadForm").addEventListener("submit",function(e){
@@ -651,6 +688,7 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgScS").textContent=state.tried[2]?(s[2]?"Oui":"Pas encore"):"Plus tard";
     $("rgScT").textContent=state.tried[3]?s[3]+"/2":"Plus tard";
     $("rgScV").textContent=state.tried[4]?s[4]+"/5":"Plus tard";
+    $("rgScTr").textContent=(state.traceOk||0)+"/4";
     $("rgClubTitle").textContent="Une place dans le groupe francophone « "+L.name.replace("Groupe ","")+" »";
     $("rgBookContact").hidden=!!state.lead;
     track("rg_result",{level:state.levelKey}); confetti(); chime();
@@ -680,7 +718,7 @@ body:has(.amf-rg){background:#FBF6EC}
     var btn=$("rgBookBtn"); btn.disabled=true; btn.textContent="Envoi…";
     var props=readingProps();
     props.child_name=state.name||"(not given)"; props.child_age=state.age; props.whatsapp=wa; props.child_first_language=lang; props.arabic_at_home=state.home||undefined;
-    props.fr_waitlist=true; props.fr_waitlist_at=new Date().toISOString(); props.fr_preferred_slot=state.date; props.fr_interested_kids=state.kidsCount||undefined;
+    props.fr_waitlist=true; props.fr_waitlist_at=new Date().toISOString(); props.fr_preferred_slot=state.date; props.fr_interested_kids=state.kidsCount||undefined; var note=($("rgNote").value||"").trim().slice(0,600); if(note) props.fr_parent_note=note;
     props.parent_time_zone=tz; props.heard_about="Test de lecture FR";
     save("booked",{name:state.name,date:state.date,level:state.levelKey});
     track("rg_book_submit",{level:state.levelKey,lang:"fr"}); fb("ReadingGameFRWaitlist",{level:state.levelKey});
@@ -690,7 +728,7 @@ body:has(.amf-rg){background:#FBF6EC}
     function go(){
       if(sent) return; sent=true;
       // Same store contact form as the club page, so you get the usual booking email
-      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Liste d'attente groupe francophone (test de lecture FR)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Child first language]":lang,"contact[Preferred slot]":state.date,"contact[Interested kids]":state.kidsCount,"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Test de lecture FR ("+UTM.source+")"};
+      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Liste d'attente groupe francophone (test de lecture FR)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Child first language]":lang,"contact[Preferred slot]":state.date,"contact[Interested kids]":state.kidsCount,"contact[Note]":($("rgNote").value||"").trim(),"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Test de lecture FR ("+UTM.source+")"};
       f.innerHTML=""; Object.keys(fields).forEach(function(k){ var i=document.createElement("input"); i.type="hidden"; i.name=k; i.value=fields[k]||""; f.appendChild(i); });
       try{ f.submit(); }catch(e){ showDone(); }
     }

@@ -43,7 +43,7 @@ limit (product videos). So the live page loads everything from Shopify Files ins
 
 ## French version (Nov 13, 2026)
 `game-fr.html` -> `rg-fr.js` (build.py builds both). Live page: /pages/jeu-de-lecture-arabe (short link /test-lecture),
-script in Shopify Files as `amf-reading-game-fr-vN.js` (current v3).
+script in Shopify Files as `amf-reading-game-fr-vN.js` (current v4).
 Differences from English: French text, age chips 4-5 / 6-7 / 8-9 / 10-11 / 12+, a 4th round "Texte"
 (2 short texts with a 3-choice comprehension question: 1st with vowels, 2nd without; shown only if the sentence was read),
 two extra levels (reader = "Groupe Lecteurs", advanced = "Groupe Lecteurs confirmés").
@@ -56,3 +56,8 @@ cards answer with "J'ai trouvé !" (known) or "Je ne sais pas" (tried, not known
 FR v3 (Nov 13): tracing moved to the start (warm-up before letters); waitlist slots in Morocco time; new last round
 "Devine !" (5 "Comment dit-on… ?" flashcards: soleil, livre, fête, école, papillon; 3 Arabic choices each), shown to any
 child who read 2+ words; score "Vocabulaire x/5" (Klaviyo reading_vocab), does not change the level.
+FR v4 (Nov 13): tracing = 4 letters in a row (ب ت م س) with a progress row and "Lettre x sur 4". A letter passes only when
+85% is covered AND every separate piece (body, each dot) is at least 60% covered (pieces found with 5 px cells,
+4-neighbour). Success or "Je ne sais pas, lettre suivante" both show a short "Bravo ! / Pas grave ! Lettre suivante"
+card, then the next letter. Score "Tracé x/4" (Klaviyo reading_trace). Waitlist: Friday afternoon slot added; optional
+parent note (Klaviyo fr_parent_note, contact[Note]).
