@@ -55,6 +55,8 @@ body:has(.amf-rg){background:#FBF6EC}
 .rg-big{font-size:clamp(84px,26vw,128px);line-height:1.45;text-align:center;min-height:1.45em;display:flex;align-items:center;justify-content:center;color:var(--ink)}
 .rg-big.sent{font-size:clamp(40px,11vw,58px);line-height:1.8}
 .rg-big.txt{display:block;font-size:clamp(23px,6.4vw,29px);line-height:2.05;text-align:right;min-height:0;align-self:stretch}
+.rg-big.fr{font-family:var(--display);direction:ltr;font-size:clamp(38px,11vw,54px);line-height:1.2;min-height:0;padding:10px 0}
+.rg-tq.fr{font-family:var(--display);direction:ltr;font-size:18px;color:var(--ink-soft)}
 .rg-tq{font-size:clamp(22px,6vw,26px);text-align:center;color:var(--ink);line-height:1.7}
 .rg-choices{display:grid;gap:10px;align-self:stretch}
 .amf-rg .rg-choices button{border:3px solid var(--ink);border-radius:16px;background:var(--white);box-shadow:0 3px 0 var(--ink);padding:8px 12px;font-family:var(--arabic);font-weight:700;font-size:22px;line-height:1.7;color:var(--ink);direction:rtl}
@@ -124,7 +126,7 @@ body:has(.amf-rg){background:#FBF6EC}
 /* result */
 .rg-level{font-weight:800;font-size:clamp(30px,9vw,42px);line-height:1.05;text-align:center}
 .rg-level small{display:block;font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
-.rg-score{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-self:stretch}
+.rg-score{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-self:stretch}
 .rg-score div{border-radius:16px;padding:10px 6px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
 .rg-score span{display:block;font-size:12px;letter-spacing:.6px;text-transform:uppercase;font-weight:700}
 .rg-next{align-self:stretch;background:var(--cream);border-radius:16px;padding:12px 14px;font-size:15px}
@@ -197,7 +199,7 @@ body:has(.amf-rg){background:#FBF6EC}
 
   <!-- 3. TRACE -->
   <section class="rg-screen" id="rg-trace" hidden>
-    <div class="rg-guide">{{MYA_HEAD}}<div class="rg-bubble" id="rgTraceSay">Dernier jeu ! Trace la lettre avec ton doigt. Commence au point vert et reste sur la lettre.</div></div>
+    <div class="rg-guide">{{MYA_HEAD}}<div class="rg-bubble" id="rgTraceSay">Premier jeu ! Trace la lettre avec ton doigt. Commence au point vert et reste sur la lettre.</div></div>
     <div class="rg-card">
       <div class="rg-label"><span class="rg-pill" style="background:var(--coral-tint)">À tracer</span><span class="rg-count" id="rgTracePct">0%</span></div>
       <div class="rg-letters" role="group" aria-label="Choisis une lettre">
@@ -218,7 +220,7 @@ body:has(.amf-rg){background:#FBF6EC}
   <section class="rg-screen rg-check" id="rg-check" hidden>
     <div class="rg-bounce">{{BOTH}}</div>
     <h2 class="rg-h2" id="rgCheckTitle">Sami &amp; Mya vérifient les réponses…</h2>
-    <ul><li><i></i>Lettres</li><li><i></i>Mots et phrase</li><li><i></i>Texte et compréhension</li><li><i></i>Choix du bon groupe</li></ul>
+    <ul><li><i></i>Tracé et lettres</li><li><i></i>Mots et phrase</li><li><i></i>Textes et vocabulaire</li><li><i></i>Choix du bon groupe</li></ul>
   </section>
 
   <!-- 5. LEAD GATE -->
@@ -260,6 +262,7 @@ body:has(.amf-rg){background:#FBF6EC}
         <div style="background:var(--mint-tint)"><span>Mots</span><b id="rgScW">0/3</b></div>
         <div style="background:#E6E8F8"><span>Phrase</span><b id="rgScS">–</b></div>
         <div style="background:var(--coral-tint)"><span>Texte</span><b id="rgScT">–</b></div>
+        <div style="background:#E3F1F7"><span>Vocabulaire</span><b id="rgScV">–</b></div>
       </div>
       <div class="rg-next"><b>À la maison</b><span id="rgPractice"></span></div>
     </div>
@@ -274,7 +277,7 @@ body:has(.amf-rg){background:#FBF6EC}
           <li>Cours expliqués en français par une enseignante d'arabe</li>
           <li>Vous êtes prévenus en premier quand le groupe ouvre, sans engagement</li>
         </ul>
-        <p class="rg-q" id="rgSlotQ">Quel créneau vous arrangerait ? (heure de France)</p>
+        <p class="rg-q" id="rgSlotQ">Quel créneau vous arrangerait ? (heure du Maroc)</p>
         <div class="rg-slots" id="rgSlots" role="radiogroup" aria-labelledby="rgSlotQ">
           <button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Mercredi après-midi">Mercredi<small>après-midi</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Samedi matin">Samedi<small>matin</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Dimanche matin">Dimanche<small>matin</small></button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Autre créneau">Autre<small>à voir ensemble</small></button>
         </div>
@@ -365,12 +368,22 @@ body:has(.amf-rg){background:#FBF6EC}
     {ar:"ذَهَبَ سَامِي إِلَى الحَدِيقَةِ. رَأَى قِطًّا صَغِيرًا تَحْتَ الشَّجَرَةِ. أَعْطَاهُ سَامِي حَلِيبًا.",say:"ذَهَبَ سَامِي إِلَى الحَدِيقَةِ. رَأَى قِطًّا صَغِيرًا تَحْتَ الشَّجَرَةِ. أَعْطَاهُ سَامِي حَلِيبًا.",q:"أَيْنَ رَأَى سَامِي القِطَّ؟",choices:["فِي البَيْتِ","تَحْتَ الشَّجَرَةِ","عَلَى البَابِ"],ok:1,key:"t_1",hint:"Lis le texte, puis choisis la bonne réponse."},
     {ar:"تحب ميا القراءة كثيرا. كل مساء تقرأ قصة مع أمها قبل النوم.",say:"تُحِبُّ مِيَا القِرَاءَةَ كَثِيرًا. كُلَّ مَسَاءٍ تَقْرَأُ قِصَّةً مَعَ أُمِّهَا قَبْلَ النَّوْمِ.",q:"متى تقرأ ميا القصة؟",choices:["في المدرسة","يوم الجمعة","قبل النوم"],ok:2,key:"t_2",hint:"Cette fois, le texte est <b>sans voyelles</b>, comme dans les livres."}
   ];
+  // Last step (FR): "Comment dit-on… ?" flashcards, very easy to harder.
+  var VOCAB=[
+    {fr:"soleil",choices:["قَمَر","شَمْس","بَحْر"],ok:1},
+    {fr:"livre",choices:["كِتَاب","قَلَم","بَاب"],ok:0},
+    {fr:"fête",choices:["بَيْت","عِيد","يَد"],ok:1},
+    {fr:"école",choices:["مَطْبَخ","سُوق","مَدْرَسَة"],ok:2},
+    {fr:"papillon",choices:["فَرَاشَة","سُلَحْفَاة","ضِفْدَع"],ok:0}
+  ];
+  VOCAB.forEach(function(v){ v.ar="« "+v.fr+" »"; v.q="Comment dit-on ce mot en arabe\u00a0?"; v.hint="Devine ! Touche le bon mot en arabe."; v.vocab=true; });
   var SAMI='{{SAMI_HEAD_JS}}', MYA='{{MYA_HEAD_JS}}';
   var ROUNDS=[
     {name:"Lettres",color:"var(--saffron)",items:LETTERS,who:SAMI,hello:"Tu sais lire ces lettres ? Dis chacune à voix haute !",helloAr:"اِقْرَأْ الحُرُوف"},
     {name:"Mots",color:"#6CC3A8",items:WORDS,who:MYA,hello:"Maintenant des mots ! Lis d'abord, l'image arrive après.",helloAr:"اِقْرَأْ الكَلِمَة"},
     {name:"Phrase",color:"var(--lav)",items:SENT,who:SAMI,hello:"Une phrase entière ! Passe si c'est trop difficile.",helloAr:"اِقْرَأْ الجُمْلَة"},
-    {name:"Texte",color:"var(--coral-tint)",items:TEXTS,who:MYA,hello:"Défi des grands lecteurs : lis le texte et réponds à la question !",helloAr:"اِقْرَأْ وَأَجِبْ"}
+    {name:"Texte",color:"var(--coral-tint)",items:TEXTS,who:MYA,hello:"Défi des grands lecteurs : lis le texte et réponds à la question !",helloAr:"اِقْرَأْ وَأَجِبْ"},
+    {name:"Devine !",color:"#BFE3F0",items:VOCAB,who:SAMI,hello:"Dernier jeu, pour rire : tu connais ces mots ? Devine comment on les dit en arabe !",helloAr:"خَمِّنْ!"}
   ];
   var CHEERS=["Bravo !","Super lecture !","Bien joué !","Champion !"];
   var PASS_SAY=["Pas de souci ! Écoute.","Ce n'est pas grave, écoutons ensemble.","Bonne idée ! Voilà comment ça se lit."];
@@ -382,7 +395,7 @@ body:has(.amf-rg){background:#FBF6EC}
     reader:{name:"Groupe Lecteurs",why:"Lit et comprend un petit texte avec voyelles. Prêt à lire sans voyelles et à écrire ses propres phrases.",practice:"Lisez une courte histoire illustrée par semaine, puis demandez-lui de la raconter en 3 phrases, à l'oral puis à l'écrit."},
     advanced:{name:"Groupe Lecteurs confirmés",why:"Lit et comprend un texte sans voyelles. Prêt pour la lecture suivie, la grammaire et la rédaction.",practice:"Choisissez un livre jeunesse en arabe adapté à son âge, un chapitre par semaine, et un petit résumé écrit à chaque fois."}
   };
-  var state={round:0,item:0,stars:0,score:[0,0,0,0],tried:[0,0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:""};
+  var state={round:0,item:0,stars:0,score:[0,0,0,0,0],tried:[0,0,0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:""};
 
   // ---------- sound ----------
   var voice=null, voiceChecked=false;
@@ -475,7 +488,7 @@ body:has(.amf-rg){background:#FBF6EC}
     if(!state.age){ $("rgAges").classList.add("err"); $("rgStartErr").hidden=false; return; }
     state.name=($("rgChildName").value||"").trim().slice(0,30);
     try{ if(navigator.audioSession) navigator.audioSession.type="playback"; }catch(e){}
-    warmClips(); tone(660,.12); track("rg_start",{age:state.age}); startRound(0);
+    warmClips(); tone(660,.12); track("rg_start",{age:state.age}); startTrace();
   });
 
   // ---------- reading (adaptive) ----------
@@ -483,32 +496,35 @@ body:has(.amf-rg){background:#FBF6EC}
     var r=ROUNDS[state.round], it=r.items[state.item];
     $("rgRoundPill").textContent=r.name; $("rgRoundPill").style.background=r.color;
     $("rgRoundCount").textContent=(state.item+1)+" sur "+r.items.length;
-    var isText=state.round===3;
-    var big=$("rgBigText"); big.textContent=it.ar; big.classList.toggle("sent",state.round===2); big.classList.toggle("txt",isText);
+    var isText=state.round>=3, isVocab=state.round===4;
+    var big=$("rgBigText"); big.textContent=it.ar; big.classList.toggle("sent",state.round===2); big.classList.toggle("txt",state.round===3); big.classList.toggle("fr",isVocab); big.setAttribute("lang",isVocab?"fr":"ar");
     var pic=$("rgPic"); if(isText){ pic.innerHTML=""; pic.hidden=true; } else { pic.hidden=false; pic.innerHTML=PICS[it.pic]+'<small>'+it.en+'</small>'; pic.classList.add("hide"); }
     $("rgSpeakBtn").hidden=true; pic.hidden=true; $("rgYesBtn").hidden=isText; $("rgAnswers").style.gridTemplateColumns=isText?"1fr":"1fr 1fr";
     $("rgReadHint").innerHTML=isText?it.hint:"Tu ne sais pas ? Touche <b>Je ne sais pas</b>. Ça nous aide aussi !";
     var tq=$("rgTextQ"), ch=$("rgChoices"); tq.hidden=!isText; ch.hidden=!isText; ch.removeAttribute("aria-disabled"); ch.innerHTML="";
+    tq.classList.toggle("fr",isVocab); tq.setAttribute("lang",isVocab?"fr":"ar");
     if(isText){ tq.textContent=it.q; it.choices.forEach(function(c,i){ var b=document.createElement("button"); b.type="button"; b.lang="ar"; b.textContent=c; b.addEventListener("click",function(){ answerText(i,b); }); ch.appendChild(b); }); }
     if(state.item===0){ var hello=r.hello; if(state.round===0&&state.name) hello="Salut "+esc(state.name)+" ! "+hello; $("rgReadGuide").innerHTML=bubble(r.who,hello,r.helloAr); }
   }
   function answerText(i,btn){
-    var r=ROUNDS[3], it=r.items[state.item], ch=$("rgChoices"); if(ch.getAttribute("aria-disabled")) return; ch.setAttribute("aria-disabled","true");
-    state.tried[3]++;
+    var R_=state.round, r=ROUNDS[R_], it=r.items[state.item], ch=$("rgChoices"); if(ch.getAttribute("aria-disabled")) return; ch.setAttribute("aria-disabled","true");
+    state.tried[R_]++;
     var good=i===it.ok; ch.children[it.ok].classList.add("ok"); if(!good) btn.classList.add("no");
-    if(good){ state.score[3]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250); $("rgReadGuide").innerHTML=bubble(r.who,CHEERS[Math.floor(Math.random()*CHEERS.length)],"أَحْسَنْت!"); }
+    if(good){ state.score[R_]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250); $("rgReadGuide").innerHTML=bubble(r.who,CHEERS[Math.floor(Math.random()*CHEERS.length)],"أَحْسَنْت!"); }
     else { $("rgReadGuide").innerHTML=bubble(r.who,"Pas grave ! La bonne réponse est en vert.","لَا بَأْس"); }
-    track("rg_text_answer",{item:state.item,ok:good});
+    track(R_===4?"rg_vocab_answer":"rg_text_answer",{item:state.item,ok:good});
     setTimeout(nextItem,good?700:1500);
   }
-  function startRound(i){ state.round=i; state.item=0; show("rg-read",1+ (i>0?1:0)); renderItem(); }
+  function startRound(i){ state.round=i; state.item=0; show("rg-read",i<2?2:3); renderItem(); }
   function nextItem(){
     var r=ROUNDS[state.round];
     if(state.item<r.items.length-1){ state.item++; renderItem(); return; }
     // Adaptive: don't show harder rounds to a child who passed most of this one
     var enough = state.round===0 ? state.score[0]>=2 : state.round===1 ? state.score[1]>=2 : state.score[2]>=1;
-    if(state.round<ROUNDS.length-1 && enough){ startRound(state.round+1); return; }
-    startTrace();
+    if(state.round<3 && enough){ startRound(state.round+1); return; }
+    // Fun last step (flashcards) for any child who can read words
+    if(state.round<4 && state.score[1]>=2){ startRound(4); return; }
+    finishGame();
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
@@ -519,7 +535,7 @@ body:has(.amf-rg){background:#FBF6EC}
   $("rgPassBtn").addEventListener("click",function(){
     // "Je ne sais pas": counted as tried, not known, then straight to the next card
     state.tried[state.round]++; state.passes++; track("rg_pass",{round:ROUNDS[state.round].name});
-    var r=ROUNDS[state.round]; if(state.round===3) $("rgChoices").setAttribute("aria-disabled","true");
+    var r=ROUNDS[state.round]; if(state.round>=3) $("rgChoices").setAttribute("aria-disabled","true");
     $("rgReadGuide").innerHTML=bubble(r.who,"Pas de souci, on continue !","لَا بَأْس");
     nextItem();
   });
@@ -555,9 +571,9 @@ body:has(.amf-rg){background:#FBF6EC}
   function traceSuccess(){ addStar(); chime(); confetti(); state.traced=true; $("rgTraceSay").textContent="Waouh, tracé parfait ! Touche Terminer, ou essaie une autre lettre."; }
   Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.addEventListener("click",function(){ Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(x){x.setAttribute("aria-pressed","false");}); b.setAttribute("aria-pressed","true"); cur=b.getAttribute("data-l"); speak({say:{"ب":"باء","ت":"تاء","م":"ميم","س":"سين"}[cur],key:{"ب":"l_ba","ت":"l_ta","م":"l_mim","س":"l_sin"}[cur]}); $("rgTraceSay").textContent="Trace-la ! Commence au point vert et reste sur la lettre."; setupTrace(); }); });
   $("rgClearBtn").addEventListener("click",function(){ setupTrace(); $("rgTraceSay").textContent="On recommence. Commence au point vert !"; });
-  $("rgTraceDone").addEventListener("click",finishGame);
-  $("rgTracePass").addEventListener("click",function(){ track("rg_pass",{round:"Tracé"}); finishGame(); });
-  function startTrace(){ show("rg-trace",3); var go=function(){ requestAnimationFrame(setupTrace); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
+  $("rgTraceDone").addEventListener("click",function(){ startRound(0); });
+  $("rgTracePass").addEventListener("click",function(){ track("rg_pass",{round:"Tracé"}); startRound(0); });
+  function startTrace(){ show("rg-trace",1); var go=function(){ requestAnimationFrame(setupTrace); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
   window.addEventListener("resize",function(){ if(!$("rg-trace").hidden) setupTrace(); });
 
   // ---------- level ----------
@@ -570,7 +586,7 @@ body:has(.amf-rg){background:#FBF6EC}
     if(s[3]<2) return "reader";
     return "advanced";
   }
-  function scoreText(){ var s=state.score; return "Lettres "+s[0]+"/4 · Mots "+(state.tried[1]?s[1]+"/3":"non tenté")+" · Phrase "+(state.tried[2]?(s[2]?"oui":"pas encore"):"non tentée")+" · Texte "+(state.tried[3]?s[3]+"/2":"non tenté")+(state.traced?" · A tracé une lettre":""); }
+  function scoreText(){ var s=state.score; return "Lettres "+s[0]+"/4 · Mots "+(state.tried[1]?s[1]+"/3":"non tenté")+" · Phrase "+(state.tried[2]?(s[2]?"oui":"pas encore"):"non tentée")+" · Texte "+(state.tried[3]?s[3]+"/2":"non tenté")+" · Vocabulaire "+(state.tried[4]?s[4]+"/5":"non tenté")+(state.traced?" · A tracé une lettre":""); }
 
   // ---------- checking moment → gate ----------
   function finishGame(){
@@ -591,7 +607,7 @@ body:has(.amf-rg){background:#FBF6EC}
     return fetch("https://a.klaviyo.com/client/"+path+"/?company_id="+KC,{method:"POST",keepalive:true,headers:{"Content-Type":"application/vnd.api+json","revision":REV},body:JSON.stringify(body)});
   }
   function readingProps(){
-    return {reading_level:state.levelKey,reading_level_name:LEVELS[state.levelKey].name,reading_scores:scoreText(),reading_passes:state.passes,reading_game_at:new Date().toISOString(),reading_game_lang:"fr",child_name:state.name||undefined,child_age:state.age,
+    return {reading_level:state.levelKey,reading_level_name:LEVELS[state.levelKey].name,reading_scores:scoreText(),reading_passes:state.passes,reading_vocab:state.tried[4]?state.score[4]+"/5":undefined,reading_game_at:new Date().toISOString(),reading_game_lang:"fr",child_name:state.name||undefined,child_age:state.age,
       rg_utm_source:UTM.source,rg_utm_medium:UTM.medium,rg_utm_campaign:UTM.campaign,rg_utm_content:UTM.content||undefined};
   }
   $("rgLeadForm").addEventListener("submit",function(e){
@@ -634,6 +650,7 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgScW").textContent=state.tried[1]?s[1]+"/3":"Plus tard";
     $("rgScS").textContent=state.tried[2]?(s[2]?"Oui":"Pas encore"):"Plus tard";
     $("rgScT").textContent=state.tried[3]?s[3]+"/2":"Plus tard";
+    $("rgScV").textContent=state.tried[4]?s[4]+"/5":"Plus tard";
     $("rgClubTitle").textContent="Une place dans le groupe francophone « "+L.name.replace("Groupe ","")+" »";
     $("rgBookContact").hidden=!!state.lead;
     track("rg_result",{level:state.levelKey}); confetti(); chime();
@@ -695,7 +712,7 @@ body:has(.amf-rg){background:#FBF6EC}
     try{ navigator.clipboard.writeText(msg).then(function(){ $("rgCopied").hidden=false; $("rgWaHint").hidden=true; },function(){}); }catch(e){}
   });
   $("rgAgainBtn").addEventListener("click",function(){
-    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0,0]; state.tried=[0,0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; shown=false;
+    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0,0,0]; state.tried=[0,0,0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; shown=false;
     $("rgStarCount").textContent="0"; $("rgCopied").hidden=true; $("rgBookBtn").disabled=false; $("rgBookBtn").textContent="Rejoindre la liste d'attente";
     show("rg-start",0);
   });
