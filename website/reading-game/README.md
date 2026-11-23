@@ -66,3 +66,11 @@ v9 (Nov 23): "Story" step for strong readers (same two texts as the French game)
 is read: a vowelled story, then one without vowels, each with an Arabic question and 3 answers.
 New levels: Readers group (1/2 stories) and Confident readers group (2/2). Result: the Sentence box shows
 "Story x/2" when the stories were played. reading_scores add "Story x/2".
+
+v10 (Nov 23): sound back on with Marya's new recordings only (one memo, 15 clips cut + cleaned +
+loudness-normalized to -16 LUFS, 64 kbps mono mp3 in audio/v2/, served from Shopify Files as
+amf-rg2-<key>.mp3): letters l_ba l_ta l_mim l_sin (also on tracing), words w_bab w_qitt w_bayt, sentence
+s_cat, joined-letter answers j_jamal j_walad, vocabulary v_shams v_kitab v_qamar v_qalam v_sayyara (played
+after the child answers). No praise clips (Marya: disturbing; stars + animation only). The phone's robot
+voice is never used. No audio for instructions or stories (Marya's choice). The page's SOUND OFF script
+was removed.

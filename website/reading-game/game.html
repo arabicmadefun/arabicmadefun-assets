@@ -376,8 +376,9 @@ body:has(.amf-rg){background:#FBF6EC}
 
   // ---------- content ----------
   // Recorded clips: put <key>.mp3 in audio/ next to rg.js and list the key in AUDIO_KEYS.
-  var AUDIO_KEYS=["l_ba","l_ta","l_mim","l_sin","w_bab","w_qitt","w_bayt","s_cat","p_ahsant","p_labas"];
-  var AUDIO_BASE="https://cdn.shopify.com/s/files/1/0871/0235/7754/files/amf-rg-"; // clips live in Shopify Files as amf-rg-<key>.mp3
+  // Marya's recordings (Nov 23). No praise clips on purpose: stars + animation only.
+  var AUDIO_KEYS=["l_ba","l_ta","l_mim","l_sin","w_bab","w_qitt","w_bayt","s_cat","j_jamal","j_walad","v_shams","v_kitab","v_qamar","v_qalam","v_sayyara"];
+  var AUDIO_BASE="https://cdn.shopify.com/s/files/1/0871/0235/7754/files/amf-rg2-"; // clips live in Shopify Files as amf-rg-<key>.mp3
   var CLIPS={}; AUDIO_KEYS.forEach(function(k){ CLIPS[k]=AUDIO_BASE+k+".mp3"; });
   var IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
   var PICS={{PICS_JSON}};
@@ -396,8 +397,8 @@ body:has(.amf-rg){background:#FBF6EC}
     joined:{name:"Joined letters",color:"var(--coral-tint)",items:[
       {ask:"Which letter is this?",p:"ـبـ",o:["ب","ن","ت"]},
       {ask:"Which letter is this?",p:"ـجـ",o:["ج","ح","خ"]},
-      {ask:"Which letters make this word?",p:"جَمَل",o:["ج م ل","ح م ل","ج ن ل"],small:1},
-      {ask:"Which word do these letters make?",p:"و + ل + د",o:["وَلَد","وَرَق","بَلَد"],small:1}
+      {ask:"Which letters make this word?",key:"j_jamal",p:"جَمَل",o:["ج م ل","ح م ل","ج ن ل"],small:1},
+      {ask:"Which word do these letters make?",key:"j_walad",p:"و + ل + د",o:["وَلَد","وَرَق","بَلَد"],small:1}
     ]},
     // Short stories for strong readers (same texts as the French game): vowelled, then without vowels
     texts:{name:"Story",color:"var(--lav)",items:[
@@ -405,11 +406,11 @@ body:has(.amf-rg){background:#FBF6EC}
       {ask:"Now without vowels, like in real books",t:"تحب ميا القراءة كثيرا. كل مساء تقرأ قصة مع أمها قبل النوم.",qq:"متى تقرأ ميا القصة؟",o:["قبل النوم","في المدرسة","يوم الجمعة"]}
     ]},
     vocab:{name:"Vocabulary",color:"var(--mint-tint)",items:[
-      {ask:"What is this in Arabic?",pic:"sun",o:["شَمْس","قَمَر","بَاب"]},
-      {ask:"What is this in Arabic?",pic:"book",o:["كِتَاب","قَلَم","بَيْت"]},
-      {ask:"What is this in Arabic?",pic:"moon",o:["قَمَر","شَمْس","قِطّ"]},
-      {ask:"What is this in Arabic?",pic:"pencil",o:["قَلَم","كِتَاب","مَوْز"]},
-      {ask:"What is this in Arabic?",pic:"car",o:["سَيَّارَة","مَدْرَسَة","سَمَكَة"],small:1}
+      {ask:"What is this in Arabic?",key:"v_shams",pic:"sun",o:["شَمْس","قَمَر","بَاب"]},
+      {ask:"What is this in Arabic?",key:"v_kitab",pic:"book",o:["كِتَاب","قَلَم","بَيْت"]},
+      {ask:"What is this in Arabic?",key:"v_qamar",pic:"moon",o:["قَمَر","شَمْس","قِطّ"]},
+      {ask:"What is this in Arabic?",key:"v_qalam",pic:"pencil",o:["قَلَم","كِتَاب","مَوْز"]},
+      {ask:"What is this in Arabic?",key:"v_sayyara",pic:"car",o:["سَيَّارَة","مَدْرَسَة","سَمَكَة"],small:1}
     ]}
   };
   var CHEERS=["Yay!","Great reading!","Well done!","Super star!"];
@@ -458,11 +459,10 @@ body:has(.amf-rg){background:#FBF6EC}
     if(url){
       try{
         stopAll(); var a=clipCache[item.key]||(clipCache[item.key]=new Audio(url)); a.currentTime=0;
-        var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ speakVoice(item); });
-        return;
+        var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){});
       }catch(e){}
     }
-    speakVoice(item);
+    // No phone (robot) voice: Marya's recordings only
   }
   function warmClips(){ Object.keys(CLIPS).forEach(function(k){ try{ var a=clipCache[k]||(clipCache[k]=new Audio(CLIPS[k])); a.preload="auto"; a.load(); }catch(e){} }); }
   var actx=null;
@@ -537,14 +537,14 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
-    state.tried[state.round]++; state.score[state.round]++; addStar(); chime(); setTimeout(function(){ playKey("p_ahsant"); },250);
+    state.tried[state.round]++; state.score[state.round]++; addStar(); chime();
     setTimeout(nextItem,650);
   });
   $("rgPassBtn").addEventListener("click",function(){
     state.tried[state.round]++; state.passes++; track("rg_pass",{round:ROUNDS[state.round].name});
     var r=ROUNDS[state.round], it=r.items[state.item]; $("rgPic").classList.remove("hide");
-    if(CLIPS.p_labas&&CLIPS[it.key]){ playKey("p_labas",function(){ speak(it); }); } else { speak(it); }
-    setTimeout(nextItem,CLIPS.p_labas?(it.key==="s_cat"?5600:4300):1600);
+    speak(it);
+    setTimeout(nextItem,it.key==="s_cat"?3200:2200);
   });
 
   // ---------- quiz: joined letters + vocabulary ----------
@@ -562,11 +562,12 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   function markRight(){ Array.prototype.forEach.call($("rgQOpts").children,function(x){ if(x.getAttribute("data-ok")==="1") x.classList.add("ok"); }); }
   function answerQ(b){
-    if(qLock) return; qLock=true; var sc=state.q[state.qkind]; sc[1]++;
-    if(b.getAttribute("data-ok")==="1"){ sc[0]++; b.classList.add("ok"); addStar(); chime(); setTimeout(nextQ,700); }
-    else { b.classList.add("no"); markRight(); tone(220,.2,"triangle"); setTimeout(nextQ,1400); }
+    if(qLock) return; qLock=true; var sc=state.q[state.qkind]; sc[1]++; var it=QUIZ[state.qkind].items[state.qi];
+    if(it.key) setTimeout(function(){ playKey(it.key); },250);
+    if(b.getAttribute("data-ok")==="1"){ sc[0]++; b.classList.add("ok"); addStar(); chime(); setTimeout(nextQ,it.key?1600:700); }
+    else { b.classList.add("no"); markRight(); tone(220,.2,"triangle"); setTimeout(nextQ,it.key?1900:1400); }
   }
-  $("rgQPass").addEventListener("click",function(){ if(qLock) return; qLock=true; state.q[state.qkind][1]++; state.passes++; track("rg_pass",{round:QUIZ[state.qkind].name}); markRight(); setTimeout(nextQ,1300); });
+  $("rgQPass").addEventListener("click",function(){ if(qLock) return; qLock=true; state.q[state.qkind][1]++; state.passes++; track("rg_pass",{round:QUIZ[state.qkind].name}); markRight(); var it=QUIZ[state.qkind].items[state.qi]; if(it.key) playKey(it.key); setTimeout(nextQ,it.key?1900:1300); });
   function nextQ(){
     if(state.qi<QUIZ[state.qkind].items.length-1){ state.qi++; renderQ(); return; }
     if(state.qkind==="joined") startRound(1); else if(state.qkind==="texts") startQuiz("vocab"); else startTrace();
