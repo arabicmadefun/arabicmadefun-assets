@@ -61,3 +61,8 @@ to tracing; fewer than 2 words skips the sentence). Level: Words group now also 
 Vocabulary is reported, not used for the level. Tracing is stricter: ~95% of the letter AND every piece
 (body, each dot) 80% covered before "Bravo" ("Almost! Don't forget the dot."). The instruction line above
 the board is one fixed line so the board never moves while tracing.
+
+v9 (Nov 23): "Story" step for strong readers (same two texts as the French game), only after the sentence
+is read: a vowelled story, then one without vowels, each with an Arabic question and 3 answers.
+New levels: Readers group (1/2 stories) and Confident readers group (2/2). Result: the Sentence box shows
+"Story x/2" when the stories were played. reading_scores add "Story x/2".

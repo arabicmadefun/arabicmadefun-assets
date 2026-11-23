@@ -92,6 +92,10 @@ body:has(.amf-rg){background:#FBF6EC}
 .rg-qprompt{min-height:118px;display:flex;align-items:center;justify-content:center;font-size:clamp(56px,17vw,84px);line-height:1.4;color:var(--ink)}
 .rg-qprompt.small{font-size:clamp(40px,12vw,56px)}
 .rg-qprompt svg{height:110px;width:auto}
+.rg-qprompt.text{display:block;font-size:21px;line-height:1.9;text-align:right;min-height:0;align-self:stretch;background:var(--cream);border-radius:16px;padding:8px 14px}
+.rg-qprompt.text .qq{display:block;margin-top:4px;padding-top:4px;border-top:2px dashed var(--line);color:#3F8F7C}
+.rg-opts.col1{grid-template-columns:1fr;gap:8px}
+.amf-rg .rg-opts.col1 .rg-opt{font-size:21px;padding:4px 8px;line-height:1.6}
 .rg-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-self:stretch}
 .amf-rg .rg-opt{border:3px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:0 4px 0 var(--ink);font-family:var(--arabic);font-weight:700;font-size:30px;line-height:1.5;padding:8px 2px;color:var(--ink);direction:rtl;unicode-bidi:isolate}
 .amf-rg .rg-opts.small .rg-opt{font-size:23px}
@@ -395,6 +399,11 @@ body:has(.amf-rg){background:#FBF6EC}
       {ask:"Which letters make this word?",p:"جَمَل",o:["ج م ل","ح م ل","ج ن ل"],small:1},
       {ask:"Which word do these letters make?",p:"و + ل + د",o:["وَلَد","وَرَق","بَلَد"],small:1}
     ]},
+    // Short stories for strong readers (same texts as the French game): vowelled, then without vowels
+    texts:{name:"Story",color:"var(--lav)",items:[
+      {ask:"Read the story, then answer the question",t:"ذَهَبَ سَامِي إِلَى الحَدِيقَةِ. رَأَى قِطًّا صَغِيرًا تَحْتَ الشَّجَرَةِ. أَعْطَاهُ سَامِي حَلِيبًا.",qq:"أَيْنَ رَأَى سَامِي القِطَّ؟",o:["تَحْتَ الشَّجَرَةِ","فِي البَيْتِ","عَلَى البَابِ"]},
+      {ask:"Now without vowels, like in real books",t:"تحب ميا القراءة كثيرا. كل مساء تقرأ قصة مع أمها قبل النوم.",qq:"متى تقرأ ميا القصة؟",o:["قبل النوم","في المدرسة","يوم الجمعة"]}
+    ]},
     vocab:{name:"Vocabulary",color:"var(--mint-tint)",items:[
       {ask:"What is this in Arabic?",pic:"sun",o:["شَمْس","قَمَر","بَاب"]},
       {ask:"What is this in Arabic?",pic:"book",o:["كِتَاب","قَلَم","بَيْت"]},
@@ -409,9 +418,11 @@ body:has(.amf-rg){background:#FBF6EC}
     first_steps:{name:"First steps group",why:"Just starting: meeting the first letters with songs and games.",practice:"Point to one letter a day, like <span class=\"ar\">ب</span>, <span class=\"ar\">ت</span> or <span class=\"ar\">م</span>, and say its sound together. Short and fun beats long."},
     letters:{name:"Letters group",why:"Knows some letters. Ready to learn them all and start joining them.",practice:"Play \"find the letter\" on signs and packaging, then try joining two letters like <span class=\"ar\">بَا</span>."},
     words:{name:"Words group",why:"Reads letters and short words. Ready to read more words and build sentences.",practice:"Read one short word a day with a picture, then make a 2-word phrase like <span class=\"ar\">بَيْت كَبِير</span> (a big house)."},
-    sentences:{name:"Sentences group",why:"Reads words and a whole sentence. Ready for longer sentences and short stories.",practice:"Read a short sentence together each night and ask one question about it in Arabic."}
+    sentences:{name:"Sentences group",why:"Reads words and a whole sentence. Ready for longer sentences and short stories.",practice:"Read a short sentence together each night and ask one question about it in Arabic."},
+    readers:{name:"Readers group",why:"Reads and understands a short story with vowels. Ready to read without vowels and write their own sentences.",practice:"Read one short picture story a week, then ask your child to retell it in 3 sentences, out loud and then in writing."},
+    confident:{name:"Confident readers group",why:"Reads and understands a story without vowels. Ready for longer reading, grammar and writing.",practice:"Pick an Arabic children's book for their age: one chapter a week, with a short written summary each time."}
   };
-  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:"",times:[],qkind:"",qi:0,q:{joined:[0,0],vocab:[0,0]}};
+  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:"",times:[],qkind:"",qi:0,q:{joined:[0,0],texts:[0,0],vocab:[0,0]}};
 
   // ---------- sound ----------
   var voice=null, voiceChecked=false;
@@ -464,7 +475,7 @@ body:has(.amf-rg){background:#FBF6EC}
   var SCREENS=["rg-start","rg-read","rg-quiz","rg-trace","rg-check","rg-gate","rg-result","rg-done"];
   function show(id,step){
     SCREENS.forEach(function(s){ $(s).hidden=(s!==id); });
-    var t={"rg-start":-1,"rg-read":[0,2,3][state.round],"rg-quiz":state.qkind==="vocab"?4:1,"rg-trace":5,"rg-check":6,"rg-gate":6,"rg-result":6,"rg-done":7}[id];
+    var t={"rg-start":-1,"rg-read":[0,2,3][state.round],"rg-quiz":{joined:1,texts:3,vocab:4}[state.qkind],"rg-trace":5,"rg-check":6,"rg-gate":6,"rg-result":6,"rg-done":7}[id];
     $("rgTrail").hidden=(t<0); var bars=$("rgTrail").children; for(var i=0;i<bars.length;i++){ bars[i].className=i<t?"done":(i===t?"now":""); }
     try{ window.scrollTo({top:0,behavior:"auto"}); }catch(e){ window.scrollTo(0,0); }
   }
@@ -522,7 +533,7 @@ body:has(.amf-rg){background:#FBF6EC}
     // Adaptive: letters → joined letters → words → sentence → vocabulary → tracing
     if(state.round===0){ if(state.score[0]>=2) startQuiz("joined"); else startTrace(); return; }
     if(state.round===1){ if(state.score[1]>=2) startRound(2); else startQuiz("vocab"); return; }
-    startQuiz("vocab");
+    if(state.score[2]>=1) startQuiz("texts"); else startQuiz("vocab");
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
@@ -544,8 +555,9 @@ body:has(.amf-rg){background:#FBF6EC}
     var Q=QUIZ[state.qkind], it=Q.items[state.qi]; qLock=false;
     $("rgQPill").textContent=Q.name; $("rgQPill").style.background=Q.color;
     $("rgQCount").textContent=(state.qi+1)+" of "+Q.items.length; $("rgQAsk").textContent=it.ask;
-    var pr=$("rgQPrompt"); pr.className="rg-qprompt ar"+(it.small?" small":""); if(it.pic){ pr.innerHTML=PICS[it.pic]; } else { pr.textContent=it.p; }
-    var box=$("rgQOpts"); box.className="rg-opts"+(it.small?" small":""); box.innerHTML="";
+    var pr=$("rgQPrompt"); pr.className="rg-qprompt ar"+(it.small?" small":"")+(it.t?" text":"");
+    if(it.pic){ pr.innerHTML=PICS[it.pic]; } else if(it.t){ pr.innerHTML=esc(it.t)+'<span class="qq">'+esc(it.qq)+'</span>'; } else { pr.textContent=it.p; }
+    var box=$("rgQOpts"); box.className="rg-opts"+(it.small?" small":"")+(it.t?" col1":""); box.innerHTML="";
     shuffle(it.o).forEach(function(o){ var b=document.createElement("button"); b.type="button"; b.className="rg-opt"; b.lang="ar"; b.textContent=o; b.setAttribute("data-ok",o===it.o[0]?"1":"0"); b.addEventListener("click",function(){ answerQ(b); }); box.appendChild(b); });
   }
   function markRight(){ Array.prototype.forEach.call($("rgQOpts").children,function(x){ if(x.getAttribute("data-ok")==="1") x.classList.add("ok"); }); }
@@ -557,7 +569,7 @@ body:has(.amf-rg){background:#FBF6EC}
   $("rgQPass").addEventListener("click",function(){ if(qLock) return; qLock=true; state.q[state.qkind][1]++; state.passes++; track("rg_pass",{round:QUIZ[state.qkind].name}); markRight(); setTimeout(nextQ,1300); });
   function nextQ(){
     if(state.qi<QUIZ[state.qkind].items.length-1){ state.qi++; renderQ(); return; }
-    if(state.qkind==="joined") startRound(1); else startTrace();
+    if(state.qkind==="joined") startRound(1); else if(state.qkind==="texts") startQuiz("vocab"); else startTrace();
   }
 
   // ---------- tracing ----------
@@ -625,9 +637,11 @@ body:has(.amf-rg){background:#FBF6EC}
     if(s[0]<2) return "first_steps";
     if(state.q.joined[0]<2||s[1]<2) return "letters";
     if(s[2]<1) return "words";
+    if(state.q.texts[0]>=2) return "confident";
+    if(state.q.texts[0]>=1) return "readers";
     return "sentences";
   }
-  function scoreText(){ var s=state.score; return "Letters "+s[0]+"/4 · Words "+(state.tried[1]?s[1]+"/3":"not tried")+" · Sentence "+(state.tried[2]?(s[2]?"yes":"not yet"):"not tried")+(state.q.joined[1]?" · Joined "+state.q.joined[0]+"/4":"")+(state.q.vocab[1]?" · Vocabulary "+state.q.vocab[0]+"/5":"")+(state.traceTried?" · Traced "+(state.traceScore||0)+"/4":""); }
+  function scoreText(){ var s=state.score; return "Letters "+s[0]+"/4 · Words "+(state.tried[1]?s[1]+"/3":"not tried")+" · Sentence "+(state.tried[2]?(s[2]?"yes":"not yet"):"not tried")+(state.q.joined[1]?" · Joined "+state.q.joined[0]+"/4":"")+(state.q.texts[1]?" · Story "+state.q.texts[0]+"/2":"")+(state.q.vocab[1]?" · Vocabulary "+state.q.vocab[0]+"/5":"")+(state.traceTried?" · Traced "+(state.traceScore||0)+"/4":""); }
 
   // ---------- checking moment → gate ----------
   function finishGame(){
@@ -690,6 +704,7 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgScL").textContent=s[0]+"/4";
     $("rgScW").textContent=state.tried[1]?s[1]+"/3":"Next time";
     $("rgScS").textContent=state.tried[2]?(s[2]?"Yes":"Not yet"):"Next time";
+    if(state.q.texts[1]){ $("rgScS").previousElementSibling.textContent="Story"; $("rgScS").textContent=state.q.texts[0]+"/2"; } else { $("rgScS").previousElementSibling.textContent="Sentence"; }
     $("rgScJ").textContent=state.q.joined[1]?state.q.joined[0]+"/4":"Next time";
     $("rgScV").textContent=state.q.vocab[1]?state.q.vocab[0]+"/5":"Next time";
     $("rgScT").textContent=state.traceTried?(state.traceScore||0)+"/4":"Next time";
@@ -769,7 +784,7 @@ body:has(.amf-rg){background:#FBF6EC}
     try{ navigator.clipboard.writeText(msg).then(function(){ $("rgCopied").hidden=false; $("rgWaHint").hidden=true; },function(){}); }catch(e){}
   });
   $("rgAgainBtn").addEventListener("click",function(){
-    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; state.times=[]; state.q={joined:[0,0],vocab:[0,0]}; state.qkind=""; shown=false;
+    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; state.times=[]; state.q={joined:[0,0],texts:[0,0],vocab:[0,0]}; state.qkind=""; shown=false;
     $("rgStarCount").textContent="0"; $("rgCopied").hidden=true; $("rgBookBtn").disabled=false; $("rgBookBtn").textContent="Send my times";
     show("rg-start",0);
   });
