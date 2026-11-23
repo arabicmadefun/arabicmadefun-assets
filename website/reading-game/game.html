@@ -130,6 +130,8 @@ body:has(.amf-rg){background:#FBF6EC}
 .amf-rg .rg-dates .rg-chip{font-size:16px;line-height:1.2;padding:10px 8px}
 .rg-chip small{display:block;font-weight:600;font-size:12px;color:var(--ink-soft)}
 .amf-rg .rg-dates .rg-chip.wide{grid-column:1/-1;font-size:15px}
+.rg-price{background:var(--cream);border-radius:16px;padding:12px 14px;font-size:16px;text-align:center}
+.rg-price b{font-size:20px}
 .rg-chips3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .amf-rg .rg-chips3 .rg-chip{font-size:16px;padding:10px 4px}
 .amf-rg .rg-wa{display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#0B3B1F;border:3px solid var(--ink);border-radius:18px;padding:13px;font-weight:800;font-size:17px;box-shadow:0 4px 0 var(--ink);align-self:stretch;text-align:center}
@@ -164,7 +166,7 @@ body:has(.amf-rg){background:#FBF6EC}
     </label>
     <p class="rg-err" id="rgStartErr" role="alert" hidden>Please tap your child's age to start.</p>
     <button class="rg-btn go" id="rgStartBtn" type="button">Start the game</button>
-    <p class="rg-micro">Turn your sound on · Free · About 3 minutes</p>
+    <p class="rg-micro">Free · Quick</p>
   </section>
 
   <!-- 2. READ -->
@@ -220,7 +222,7 @@ body:has(.amf-rg){background:#FBF6EC}
     <ul class="rg-ticks">
       <li id="rgGetLevel">Your child's level and the right class group</li>
       <li>What to practice next at home</li>
-      <li>A free seat in a live class at their level</li>
+      <li>A place in a weekly group at their level</li>
     </ul>
     <form class="rg-form" id="rgLeadForm" novalidate>
       <label class="rg-field" for="rgParentName">Your first name
@@ -234,7 +236,7 @@ body:has(.amf-rg){background:#FBF6EC}
       </label>
       <p class="rg-err" id="rgLeadErr" role="alert" hidden></p>
       <button class="rg-btn go" id="rgLeadBtn" type="submit"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.5" fill="none"/></svg>Unlock the result</button>
-      <p class="rg-micro">We'll email you about your child's result and our free classes, plus a few tips. Unsubscribe anytime. We never share your details.</p>
+      <p class="rg-micro">We'll email you about your child's result and our classes, plus a few tips. Unsubscribe anytime. We never share your details.</p>
     </form>
     <button class="rg-textbtn" id="rgSkipLead" type="button">Skip, just show the result</button>
   </section>
@@ -255,15 +257,15 @@ body:has(.amf-rg){background:#FBF6EC}
     <div class="rg-club" id="rgBook">
       {{CLASS_SVG}}
       <div class="rg-club-in">
-        <span class="rg-eyebrow">Free trial class · 45 min online</span>
-        <h2 class="rg-h2" id="rgClubTitle">Book a free class in the Words group</h2>
+        <span class="rg-eyebrow">Weekly group · one class per week, 35 minutes each</span>
+        <h2 class="rg-h2" id="rgClubTitle">A weekly Words group for your child</h2>
         <ul class="rg-ticks">
-          <li>Small groups of up to 6 children at the same level</li>
+          <li>Small groups of 5–6 children at the same level</li>
           <li>Taught in clear English, so you don't need any Arabic</li>
           <li>Every child speaks, earns stars and plays with Sami &amp; Mya</li>
         </ul>
-        <p class="rg-q" id="rgDateQ">Pick a date (11:00 AM in your time zone)</p>
-        <div class="rg-dates" id="rgDates" role="radiogroup" aria-labelledby="rgDateQ"></div>
+        <p class="rg-q" id="rgDateQ">Which times suit your child? Tick all that work (UAE time)</p>
+        <div class="rg-dates" id="rgDates" role="group" aria-labelledby="rgDateQ"></div>
         <p class="rg-q" id="rgHomeQ">Does anyone at home speak Arabic?</p>
         <div class="rg-chips3" id="rgHome" role="radiogroup" aria-labelledby="rgHomeQ">
           <button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="No">No</button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="A little">A little</button><button type="button" class="rg-chip" role="radio" aria-checked="false" data-v="Yes">Yes</button>
@@ -273,10 +275,10 @@ body:has(.amf-rg){background:#FBF6EC}
           <label class="rg-field" for="rgBEmail">Your email<input id="rgBEmail" type="email" inputmode="email" autocomplete="email"></label>
           <label class="rg-field" for="rgBLang">Your child's first language<select id="rgBLang" class="rg-select"><option value="">Choose</option><option>English</option><option>Arabic</option><option>French</option><option>Urdu</option><option>Hindi</option><option>Amharic</option><option>Balochi</option><option>Bengali</option><option>Chinese (Mandarin)</option><option>Dutch</option><option>Farsi (Persian)</option><option>German</option><option>Gujarati</option><option>Italian</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Memoni</option><option>Nepali</option><option>Pashto</option><option>Portuguese</option><option>Punjabi</option><option>Russian</option><option>Saraiki</option><option>Sindhi</option><option>Sinhala</option><option>Somali</option><option>Spanish</option><option>Swahili</option><option>Tagalog (Filipino)</option><option>Tamil</option><option>Telugu</option><option>Turkish</option><option>Other</option></select></label>
         </div>
-        <div class="rg-field"><label for="rgCcB">WhatsApp number <small>(for the class link and reminders)</small></label><div class="rg-phone"><span class="rg-ccwrap"><span class="rg-ccshow" id="rgCcShowB" aria-hidden="true">Code</span><select id="rgCcB" class="rg-cc" aria-label="Country code"></select></span><input id="rgPhoneB" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number" maxlength="20" aria-label="WhatsApp number without the country code"></div></div>
+        <div class="rg-field"><label for="rgCcB">WhatsApp number <small>(to tell you your group time)</small></label><div class="rg-phone"><span class="rg-ccwrap"><span class="rg-ccshow" id="rgCcShowB" aria-hidden="true">Code</span><select id="rgCcB" class="rg-cc" aria-label="Country code"></select></span><input id="rgPhoneB" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number" maxlength="20" aria-label="WhatsApp number without the country code"></div></div>
         <p class="rg-err" id="rgBookErr" role="alert" hidden></p>
-        <button class="rg-btn club" id="rgBookBtn" type="button">Book my free seat</button>
-        <p class="rg-micro">Free · No card needed · Groups close at 6 children</p>
+        <button class="rg-btn club" id="rgBookBtn" type="button">Send my times</button>
+        <p class="rg-micro" id="rgPriceMicro">AED 290 a month · cancel any month</p>
       </div>
     </div>
 
@@ -291,15 +293,13 @@ body:has(.amf-rg){background:#FBF6EC}
 
   <!-- 7. BOOKED -->
   <section class="rg-screen" id="rg-done" hidden>
-    <div class="rg-guide">{{BOTH}}<div class="rg-bubble">Yay! See you in class!<span class="ar">إِلَى اللِّقَاء!</span></div></div>
+    <div class="rg-guide">{{BOTH}}<div class="rg-bubble">Yay! See you in class soon!<span class="ar">إِلَى اللِّقَاء!</span></div></div>
     <div class="rg-card">
-      <h2 class="rg-h2" id="rgDoneTitle" style="text-align:center">Your free seat is requested</h2>
-      <p class="rg-hint" id="rgDoneText">We'll confirm within 24 hours by email and WhatsApp, and send the class link before the class.</p>
-      <ul class="rg-ticks">
-        <li>Sit beside your child for the 45 minutes</li>
-        <li>Have paper and crayons ready</li>
-        <li>Cameras are optional</li>
-      </ul>
+      <h2 class="rg-h2" id="rgDoneTitle" style="text-align:center">Thank you! We have your times</h2>
+      <p class="rg-hint" id="rgDoneText">We'll message you on WhatsApp with your child's group time.</p>
+      <div class="rg-price">Weekly group: <b id="rgPriceTxt">AED 290 a month</b><br>One class per week, 35 minutes each</div>
+      <a class="rg-btn club" id="rgPayBtn" href="https://arabicmadefun.com/discount/FOUNDING?redirect=/products/arabic-club-live-online-classes-1-month" target="_blank" rel="noopener">Book the seat</a>
+      <p class="rg-micro">Full refund if the group doesn't start · Cancel any month</p>
       <a class="rg-wa" href="https://wa.me/message/MN2RV43G3W7HA1" target="_blank" rel="noopener">{{WA_ICON}}Chat with Arabic Made Fun</a>
       <a class="rg-btn pass" id="rgShareBtn2" href="#" target="_blank" rel="noopener">Share the game with a friend</a>
     </div>
@@ -316,12 +316,14 @@ body:has(.amf-rg){background:#FBF6EC}
   var root=document.getElementById("amf-rg"); if(!root) return;
   var $=function(id){return document.getElementById(id);};
   var KC="S9xXC3", BOOK_LIST="X9QTYr", LEAD_LIST="RCTUtB", REV="2024-10-15", WA="https://wa.me/message/MN2RV43G3W7HA1";
-  // Trial dates: value must match the club page's options exactly. Past dates hide themselves.
-  var DATES=[
-    {day:"Sat, Nov 21",value:"Saturday, November 21 · 11:00 AM (your time)",iso:"2026-11-21"},
-    {day:"Sun, Nov 22",value:"Sunday, November 22 · 11:00 AM (your time)",iso:"2026-11-22"},
-    {day:"Sat, Nov 28",value:"Saturday, November 28 · 11:00 AM (your time)",iso:"2026-11-28"}
+  // Weekly group times (UAE time). Parents tick all that work; saved to Klaviyo preferred_class_times.
+  var TIMES=[
+    {k:"A",day:"Mon",t:"4:30 PM"},{k:"B",day:"Tue",t:"4:30 PM"},{k:"C",day:"Wed",t:"4:30 PM"},
+    {k:"D",day:"Thu",t:"4:30 PM"},{k:"E",day:"Sat",t:"3:00 PM"},{k:"F",day:"Sun",t:"3:00 PM"}
   ];
+  var PAY_URL="https://arabicmadefun.com/discount/FOUNDING?redirect=/products/arabic-club-live-online-classes-1-month";
+  function isUS(){ try{ return /^America\//.test(Intl.DateTimeFormat().resolvedOptions().timeZone||""); }catch(e){ return false; } }
+  var PRICE=isUS()?"$79 a month":"AED 290 a month";
 
   // ---------- tracking ----------
   var q; try{ q=new URLSearchParams(location.search); }catch(e){ q={get:function(){return null;}}; }
@@ -363,7 +365,7 @@ body:has(.amf-rg){background:#FBF6EC}
     words:{name:"Words group",why:"Reads letters and short words. Ready to read more words and build sentences.",practice:"Read one short word a day with a picture, then make a 2-word phrase like <span class=\"ar\">بَيْت كَبِير</span> (a big house)."},
     sentences:{name:"Sentences group",why:"Reads words and a whole sentence. Ready for longer sentences and short stories.",practice:"Read a short sentence together each night and ask one question about it in Arabic."}
   };
-  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:""};
+  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:"",times:[]};
 
   // ---------- sound ----------
   var voice=null, voiceChecked=false;
@@ -598,19 +600,23 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgScL").textContent=s[0]+"/4";
     $("rgScW").textContent=state.tried[1]?s[1]+"/3":"Next time";
     $("rgScS").textContent=state.tried[2]?(s[2]?"Yes":"Not yet"):"Next time";
-    $("rgClubTitle").textContent="Book "+(state.name?esc(state.name)+"'s":"a")+" free class in the "+L.name;
+    $("rgClubTitle").textContent="A weekly "+L.name+" for "+(state.name||"your child");
+    $("rgDateQ").textContent="Which times suit "+(state.name||"your child")+"? Tick all that work (UAE time)";
+    $("rgPriceMicro").textContent=PRICE+" · cancel any month";
     renderDates();
     $("rgBookContact").hidden=!!state.lead;
     track("rg_result",{level:state.levelKey}); confetti(); chime();
   }
   function renderDates(){
-    var box=$("rgDates"), today=new Date(); today.setHours(0,0,0,0); box.innerHTML="";
-    DATES.filter(function(d){ return new Date(d.iso+"T23:59:59")>=today; }).forEach(function(d){
-      var b=document.createElement("button"); b.type="button"; b.className="rg-chip"; b.setAttribute("role","radio"); b.setAttribute("aria-checked","false"); b.setAttribute("data-v",d.value);
-      b.innerHTML=d.day+"<small>11:00 AM your time</small>"; box.appendChild(b);
+    var box=$("rgDates"); box.innerHTML=""; state.times=[];
+    function sync(){ state.times=[]; Array.prototype.forEach.call(box.querySelectorAll(".rg-chip"),function(x){ if(x.getAttribute("aria-checked")==="true") state.times.push(x.getAttribute("data-v")); }); state.date=state.times.join(", "); $("rgBookErr").hidden=true; }
+    TIMES.forEach(function(d){
+      var b=document.createElement("button"); b.type="button"; b.className="rg-chip"; b.setAttribute("role","checkbox"); b.setAttribute("aria-checked","false"); b.setAttribute("data-v",d.k+" "+d.day+" "+d.t);
+      b.innerHTML=d.day+"<small>"+d.t+" UAE</small>"; box.appendChild(b);
+      b.addEventListener("click",function(){ b.setAttribute("aria-checked",b.getAttribute("aria-checked")==="true"?"false":"true"); n.setAttribute("aria-checked","false"); sync(); });
     });
-    var n=document.createElement("button"); n.type="button"; n.className="rg-chip wide"; n.setAttribute("role","radio"); n.setAttribute("aria-checked","false"); n.setAttribute("data-v","None of these dates work"); n.textContent="None of these dates work for us"; box.appendChild(n);
-    radio(box,function(v){ state.date=v; $("rgBookBtn").textContent = v==="None of these dates work" ? "Ask for another date" : "Book my free seat"; });
+    var n=document.createElement("button"); n.type="button"; n.className="rg-chip wide"; n.setAttribute("role","checkbox"); n.setAttribute("aria-checked","false"); n.setAttribute("data-v","None of these times work"); n.textContent="None of these times work for us"; box.appendChild(n);
+    n.addEventListener("click",function(){ var on=n.getAttribute("aria-checked")!=="true"; Array.prototype.forEach.call(box.querySelectorAll(".rg-chip"),function(x){x.setAttribute("aria-checked","false");}); n.setAttribute("aria-checked",on?"true":"false"); sync(); });
   }
   function radio(box,cb){ Array.prototype.forEach.call(box.querySelectorAll(".rg-chip"),function(b){ b.addEventListener("click",function(){ Array.prototype.forEach.call(box.querySelectorAll(".rg-chip"),function(x){x.setAttribute("aria-checked","false");}); b.setAttribute("aria-checked","true"); $("rgBookErr").hidden=true; cb(b.getAttribute("data-v")); }); }); }
   radio($("rgHome"),function(v){ state.home=v; });
@@ -618,7 +624,7 @@ body:has(.amf-rg){background:#FBF6EC}
   $("rgBookBtn").addEventListener("click",function(){
     var err=$("rgBookErr"); err.hidden=true;
     function fail(msg,id){ err.textContent=msg; err.hidden=false; if(id){ $(id).setAttribute("aria-invalid","true"); $(id).focus(); } }
-    if(!state.date) return fail("Please pick a date for the free class.");
+    if(!state.date) return fail("Please tick at least one time that suits you.");
     ["rgBName","rgBEmail","rgBLang","rgCcB","rgPhoneB"].forEach(function(id){ $(id).removeAttribute("aria-invalid"); });
     var name,email,lang;
     if(state.lead){ name=state.lead.name; email=state.lead.email; lang=state.lead.lang; }
@@ -632,20 +638,20 @@ body:has(.amf-rg){background:#FBF6EC}
     if(ph.err){ if(ph.field==="rgCcB") $("rgCcB").parentNode.classList.add("bad"); return fail(ph.err,ph.field); }
     var wa=ph.number;
     var tz=""; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""; }catch(e){}
-    var btn=$("rgBookBtn"); btn.disabled=true; btn.textContent="Booking…";
+    var btn=$("rgBookBtn"); btn.disabled=true; btn.textContent="Sending…";
     var props=readingProps();
-    props.child_name=state.name||"(not given)"; props.child_age=state.age; props.children_count=1; props.trial_class=state.date; props.whatsapp=wa; props.child_first_language=lang; props.arabic_at_home=state.home||undefined;
-    props.parent_time_zone=tz; props.club_booked_at=new Date().toISOString(); props.club_source="Reading game booking"; props.heard_about="Reading game";
+    props.child_name=state.name||"(not given)"; props.child_age=state.age; props.children_count=1; props.preferred_class_times=state.date+" (UAE time)"; props.weekly_group_interest="Reading game times"; props.whatsapp=wa; props.child_first_language=lang; props.arabic_at_home=state.home||undefined;
+    props.parent_time_zone=tz; props.club_booked_at=new Date().toISOString(); props.club_source="Reading game weekly times"; props.heard_about="Reading game";
     props.club_utm_source=UTM.source; props.club_utm_medium=UTM.medium; props.club_utm_campaign="reading_test"; props.club_utm_content="game_"+state.levelKey;
     save("booked",{name:state.name,date:state.date,level:state.levelKey});
-    track("rg_book_submit",{level:state.levelKey}); fb("ReadingGameTrialBooked",{level:state.levelKey});
+    track("rg_book_submit",{level:state.levelKey}); fb("ReadingGameTimesSent",{level:state.levelKey});
     var p1=klaviyo("profiles",{data:{type:"profile",attributes:{email:email,first_name:name.split(" ")[0],properties:props}}}).catch(function(){});
-    var p2=klaviyo("subscriptions",{data:{type:"subscription",attributes:{custom_source:"Reading game booking",profile:{data:{type:"profile",attributes:{email:email}}}},relationships:{list:{data:{type:"list",id:BOOK_LIST}}}}}).catch(function(){});
+    var p2=klaviyo("subscriptions",{data:{type:"subscription",attributes:{custom_source:"Reading game weekly times",profile:{data:{type:"profile",attributes:{email:email}}}},relationships:{list:{data:{type:"list",id:BOOK_LIST}}}}}).catch(function(){});
     var sent=false;
     function go(){
       if(sent) return; sent=true;
       // Same store contact form as the club page, so you get the usual booking email
-      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Free trial class (reading game)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Child first language]":lang,"contact[Trial class]":state.date,"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Children]":"1","contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Reading game ("+UTM.source+")"};
+      var f=$("rgContactForm"), fields={form_type:"contact",utf8:"✓","contact[Request]":"Weekly group times (reading game)","contact[name]":name,"contact[email]":email,"contact[WhatsApp]":wa,"contact[Child name]":state.name,"contact[Child age]":state.age,"contact[Child first language]":lang,"contact[Preferred times (UAE)]":state.date,"contact[Arabic at home]":state.home,"contact[Parent time zone]":tz,"contact[Children]":"1","contact[Reading level]":LEVELS[state.levelKey].name+" ("+scoreText()+")","contact[Heard about us]":"Reading game ("+UTM.source+")"};
       f.innerHTML=""; Object.keys(fields).forEach(function(k){ var i=document.createElement("input"); i.type="hidden"; i.name=k; i.value=fields[k]||""; f.appendChild(i); });
       try{ f.submit(); }catch(e){ showDone(); }
     }
@@ -656,20 +662,22 @@ body:has(.amf-rg){background:#FBF6EC}
   // ---------- booked ----------
   function showDone(){
     show("rg-done",6); var b=load("booked")||{};
-    if(b.date==="None of these dates work"){ $("rgDoneTitle").textContent="Thanks! We'll find a date that works"; $("rgDoneText").textContent="We'll contact you within 24 hours by email or WhatsApp with other class times."; }
-    else if(b.date){ $("rgDoneTitle").textContent=(b.name?b.name+"'s":"Your")+" free seat is requested"; $("rgDoneText").textContent=b.date.replace(" (your time)"," in your time zone")+". We'll confirm within 24 hours by email and WhatsApp, and send the class link before the class."; }
+    $("rgPriceTxt").textContent=PRICE; $("rgPayBtn").href=PAY_URL;
+    $("rgPayBtn").addEventListener("click",function(){ track("rg_pay_click",{level:b.level||""}); fb("ReadingGamePayClick",{level:b.level||""}); });
+    if(b.date==="None of these times work"){ $("rgDoneTitle").textContent="Thanks! We'll find a time that works"; $("rgDoneText").textContent="We'll message you on WhatsApp within 24 hours with other group times."; }
+    else{ $("rgDoneTitle").textContent="Thank you! We have "+(b.name?b.name+"'s":"your")+" times"; $("rgDoneText").textContent="We'll message you on WhatsApp with "+(b.name?b.name+"'s":"your child's")+" group time."; }
     track("rg_booked",{level:b.level||""}); confetti(); chime();
   }
 
   // ---------- WhatsApp + replay ----------
   $("rgWaLink").addEventListener("click",function(){
     track("rg_whatsapp");
-    var msg="Hi Arabic Made Fun! "+(state.name||"My child")+" ("+state.age+") played the Arabic reading game.\n"+scoreText()+"\nSami & Mya suggest: "+(state.levelKey?LEVELS[state.levelKey].name:"")+"\nI have a question about the free trial class.";
+    var msg="Hi Arabic Made Fun! "+(state.name||"My child")+" ("+state.age+") played the Arabic reading game.\n"+scoreText()+"\nSami & Mya suggest: "+(state.levelKey?LEVELS[state.levelKey].name:"")+"\nI have a question about the weekly classes.";
     try{ navigator.clipboard.writeText(msg).then(function(){ $("rgCopied").hidden=false; $("rgWaHint").hidden=true; },function(){}); }catch(e){}
   });
   $("rgAgainBtn").addEventListener("click",function(){
-    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; shown=false;
-    $("rgStarCount").textContent="0"; $("rgCopied").hidden=true; $("rgBookBtn").disabled=false; $("rgBookBtn").textContent="Book my free seat";
+    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; state.times=[]; shown=false;
+    $("rgStarCount").textContent="0"; $("rgCopied").hidden=true; $("rgBookBtn").disabled=false; $("rgBookBtn").textContent="Send my times";
     show("rg-start",0);
   });
 
