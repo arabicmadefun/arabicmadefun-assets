@@ -43,3 +43,11 @@ limit (product videos). So the live page loads everything from Shopify Files ins
 - clips: cdn.shopify.com/.../files/amf-rg-<key>.mp3 (copies of audio/*.mp3)
 - script: a versioned copy of rg.js uploaded to Shopify Files (amf-reading-game-vN.js (current v5)); bump N on every change
   and update the script tag in the page body.
+
+v7 (Nov 23, Marya's feedback): age is a dropdown 4–12; progress bar shows labelled steps
+(Letters · Words · Sentence · Tracing · Result, hidden on the start screen); no speech bubbles on the
+game screens; smaller letter, picture and speaker button so each step fits one phone screen; tracing
+board 10:7 with the letter sized from its real bounds (no empty space under it). Tracing goes letter by
+letter (ب ت م س): a letter passes at ~85% coverage and moves on by itself (no Finish button); going off
+the letter shows "Oops! Let's try again" and the board clears itself; Pass skips one letter; after the
+last letter the game moves on to the result. reading_scores now include "Traced x/4".
