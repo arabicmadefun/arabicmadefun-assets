@@ -23,8 +23,8 @@ body:has(.amf-rg){background:#FBF6EC}
 .rg-logo{font-weight:800;font-size:17px;color:var(--ink)}
 .rg-logo b{color:var(--coral);font-weight:800}
 .rg-stars{display:flex;align-items:center;gap:6px;background:var(--ink);color:var(--white);border-radius:999px;padding:5px 13px 5px 9px;font-weight:800;font-variant-numeric:tabular-nums}
-.rg-trail{display:flex;gap:5px}
-.rg-trail span{flex:1;border-top:7px solid var(--line);border-radius:4px;padding-top:4px;font-size:12px;font-weight:800;text-align:center;color:var(--ink-soft);opacity:.7;transition:border-color .3s;white-space:nowrap}
+.rg-trail{display:flex;gap:3px}
+.rg-trail span{flex:1;border-top:7px solid var(--line);border-radius:4px;padding-top:4px;font-size:11px;font-weight:800;text-align:center;letter-spacing:-.01em;color:var(--ink-soft);opacity:.7;transition:border-color .3s;white-space:nowrap}
 .rg-trail span.done{border-top-color:var(--mint);opacity:1}
 .rg-trail span.now{border-top-color:var(--saffron);color:var(--ink);opacity:1}
 .rg-screen{display:flex;flex-direction:column;gap:16px}
@@ -86,9 +86,20 @@ body:has(.amf-rg){background:#FBF6EC}
 .amf-rg .rg-letters button[aria-pressed="true"]{background:var(--saffron)}
 .amf-rg .rg-letters button.ok{background:var(--mint)}
 .amf-rg .rg-letters button.skip{opacity:.45}
-.rg-tsay{font-weight:800;font-size:16px;text-align:center;min-height:1.4em}
+.rg-tsay{font-weight:800;font-size:16px;line-height:1.4;text-align:center;height:1.4em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;align-self:stretch}
 #rg-read .rg-card,#rg-trace .rg-card{gap:10px;padding:14px}
 #rg-start{gap:12px}
+.rg-qprompt{min-height:118px;display:flex;align-items:center;justify-content:center;font-size:clamp(56px,17vw,84px);line-height:1.4;color:var(--ink)}
+.rg-qprompt.small{font-size:clamp(40px,12vw,56px)}
+.rg-qprompt svg{height:110px;width:auto}
+.rg-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-self:stretch}
+.amf-rg .rg-opt{border:3px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:0 4px 0 var(--ink);font-family:var(--arabic);font-weight:700;font-size:30px;line-height:1.5;padding:8px 2px;color:var(--ink);direction:rtl;unicode-bidi:isolate}
+.amf-rg .rg-opts.small .rg-opt{font-size:23px}
+.amf-rg .rg-opt.ok{background:var(--mint)}
+.amf-rg .rg-opt.no{background:var(--coral-tint);border-color:var(--coral);box-shadow:0 4px 0 var(--coral)}
+#rg-quiz .rg-card{gap:12px;padding:14px}
+#rg-quiz .rg-tsay{white-space:normal;height:auto;min-height:1.4em}
+.rg-score{grid-template-columns:repeat(3,1fr)}
 .rg-row2{display:flex;gap:12px;align-self:stretch}
 .rg-row2>*{flex:1}
 /* checking */
@@ -156,7 +167,7 @@ body:has(.amf-rg){background:#FBF6EC}
 <div class="amf-rg" id="amf-rg"><div class="rg-in">
   <div class="rg-bar">
     <div class="rg-barrow"><span class="rg-logo">Arabic <b>Made</b> Fun</span><div class="rg-stars" aria-live="polite"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z" fill="#F2B035"/></svg><span id="rgStarCount">0</span></div></div>
-    <div class="rg-trail" id="rgTrail" aria-hidden="true" hidden><span>Letters</span><span>Words</span><span>Sentence</span><span>Tracing</span><span>Result</span></div>
+    <div class="rg-trail" id="rgTrail" aria-hidden="true" hidden><span>Letters</span><span>Joined</span><span>Words</span><span>Sentence</span><span>Vocab</span><span>Tracing</span><span>Result</span></div>
   </div>
 
   <!-- 1. START -->
@@ -191,11 +202,22 @@ body:has(.amf-rg){background:#FBF6EC}
     </div>
   </section>
 
+  <!-- 2b. QUIZ: joined letters + vocabulary (tap the right answer) -->
+  <section class="rg-screen" id="rg-quiz" hidden>
+    <div class="rg-card">
+      <div class="rg-label"><span class="rg-pill" id="rgQPill">Joined letters</span><span class="rg-count" id="rgQCount">1 of 4</span></div>
+      <p class="rg-tsay" id="rgQAsk">Which letter is this?</p>
+      <div class="rg-qprompt ar" id="rgQPrompt" lang="ar"></div>
+      <div class="rg-opts" id="rgQOpts"></div>
+      <button class="rg-btn pass" id="rgQPass" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l8 7-8 7zM14 5l8 7-8 7z" fill="currentColor"/></svg>I don't know</button>
+    </div>
+  </section>
+
   <!-- 3. TRACE -->
   <section class="rg-screen" id="rg-trace" hidden>
         <div class="rg-card">
       <div class="rg-label"><span class="rg-pill" style="background:var(--coral-tint)">Tracing</span><span class="rg-count" id="rgTraceCount">1 of 4</span></div>
-      <p class="rg-tsay" id="rgTraceSay" role="status">Start at the green dot. Stay on the letter.</p>
+      <p class="rg-tsay" id="rgTraceSay" role="status">Start at the green dot.</p>
       <div class="rg-letters" aria-hidden="true">
         <button type="button" aria-pressed="true" data-l="ب">ب</button><button type="button" aria-pressed="false" data-l="ت">ت</button><button type="button" aria-pressed="false" data-l="م">م</button><button type="button" aria-pressed="false" data-l="س">س</button>
       </div>
@@ -213,7 +235,7 @@ body:has(.amf-rg){background:#FBF6EC}
   <section class="rg-screen rg-check" id="rg-check" hidden>
     <div class="rg-bounce">{{BOTH}}</div>
     <h2 class="rg-h2" id="rgCheckTitle">Sami &amp; Mya are checking the answers…</h2>
-    <ul><li><i></i>Letters</li><li><i></i>Words and sentence</li><li><i></i>Tracing</li><li><i></i>Choosing the right group</li></ul>
+    <ul><li><i></i>Letters and joined letters</li><li><i></i>Words and sentence</li><li><i></i>Vocabulary and tracing</li><li><i></i>Choosing the right group</li></ul>
   </section>
 
   <!-- 5. LEAD GATE -->
@@ -254,6 +276,9 @@ body:has(.amf-rg){background:#FBF6EC}
         <div style="background:var(--saffron-tint)"><span>Letters</span><b id="rgScL">0/4</b></div>
         <div style="background:var(--mint-tint)"><span>Words</span><b id="rgScW">0/3</b></div>
         <div style="background:#E6E8F8"><span>Sentence</span><b id="rgScS">–</b></div>
+        <div style="background:var(--coral-tint)"><span>Joined</span><b id="rgScJ">–</b></div>
+        <div style="background:var(--mint-tint)"><span>Vocab</span><b id="rgScV">–</b></div>
+        <div style="background:var(--saffron-tint)"><span>Tracing</span><b id="rgScT">–</b></div>
       </div>
       <div class="rg-next"><b>Practice at home</b><span id="rgPractice"></span></div>
     </div>
@@ -361,6 +386,23 @@ body:has(.amf-rg){background:#FBF6EC}
     {name:"Words",color:"#6CC3A8",items:WORDS,who:MYA,hello:"Now some words! Read it first, the picture comes after.",helloAr:"اِقْرَأْ الكَلِمَة"},
     {name:"Sentence",color:"var(--lav)",items:SENT,who:SAMI,hello:"Last one: a whole sentence. Pass if it's too hard!",helloAr:"اِقْرَأْ الجُمْلَة"}
   ];
+  // Joined letters (from "Letter Shapes" + "Split & join letters") and vocabulary (from the picture flashcards).
+  // The first option is the right one; options are shuffled on screen.
+  var QUIZ={
+    joined:{name:"Joined letters",color:"var(--coral-tint)",items:[
+      {ask:"Which letter is this?",p:"ـبـ",o:["ب","ن","ت"]},
+      {ask:"Which letter is this?",p:"ـجـ",o:["ج","ح","خ"]},
+      {ask:"Which letters make this word?",p:"جَمَل",o:["ج م ل","ح م ل","ج ن ل"],small:1},
+      {ask:"Which word do these letters make?",p:"و + ل + د",o:["وَلَد","وَرَق","بَلَد"],small:1}
+    ]},
+    vocab:{name:"Vocabulary",color:"var(--mint-tint)",items:[
+      {ask:"What is this in Arabic?",pic:"sun",o:["شَمْس","قَمَر","بَاب"]},
+      {ask:"What is this in Arabic?",pic:"book",o:["كِتَاب","قَلَم","بَيْت"]},
+      {ask:"What is this in Arabic?",pic:"moon",o:["قَمَر","شَمْس","قِطّ"]},
+      {ask:"What is this in Arabic?",pic:"pencil",o:["قَلَم","كِتَاب","مَوْز"]},
+      {ask:"What is this in Arabic?",pic:"car",o:["سَيَّارَة","مَدْرَسَة","سَمَكَة"],small:1}
+    ]}
+  };
   var CHEERS=["Yay!","Great reading!","Well done!","Super star!"];
   var PASS_SAY=["No problem! Listen to it.","That's OK, let's hear it together.","Good choice! Here's how it sounds."];
   var LEVELS={
@@ -369,7 +411,7 @@ body:has(.amf-rg){background:#FBF6EC}
     words:{name:"Words group",why:"Reads letters and short words. Ready to read more words and build sentences.",practice:"Read one short word a day with a picture, then make a 2-word phrase like <span class=\"ar\">بَيْت كَبِير</span> (a big house)."},
     sentences:{name:"Sentences group",why:"Reads words and a whole sentence. Ready for longer sentences and short stories.",practice:"Read a short sentence together each night and ask one question about it in Arabic."}
   };
-  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:"",times:[]};
+  var state={round:0,item:0,stars:0,score:[0,0,0],tried:[0,0,0],passes:0,name:"",age:"",traced:false,traceTried:false,levelKey:"",lead:null,date:"",home:"",times:[],qkind:"",qi:0,q:{joined:[0,0],vocab:[0,0]}};
 
   // ---------- sound ----------
   var voice=null, voiceChecked=false;
@@ -419,10 +461,10 @@ body:has(.amf-rg){background:#FBF6EC}
   // ---------- helpers ----------
   function addStar(){ state.stars++; var c=$("rgStarCount"); c.textContent=state.stars; var p=c.parentNode; p.classList.remove("rg-pop"); void p.offsetWidth; p.classList.add("rg-pop"); }
   function confetti(){ var box=$("rgConfetti"),cols=["#F2B035","#5FB8A2","#E9765B","#A9B1E8"]; box.innerHTML=""; for(var i=0;i<26;i++){ var e=document.createElement("i"); e.style.left=(Math.random()*100)+"%"; e.style.background=cols[i%4]; e.style.animationDelay=(Math.random()*.4)+"s"; box.appendChild(e);} setTimeout(function(){box.innerHTML="";},2000); }
-  var SCREENS=["rg-start","rg-read","rg-trace","rg-check","rg-gate","rg-result","rg-done"];
+  var SCREENS=["rg-start","rg-read","rg-quiz","rg-trace","rg-check","rg-gate","rg-result","rg-done"];
   function show(id,step){
     SCREENS.forEach(function(s){ $(s).hidden=(s!==id); });
-    var t={"rg-start":-1,"rg-read":state.round,"rg-trace":3,"rg-check":4,"rg-gate":4,"rg-result":4,"rg-done":5}[id];
+    var t={"rg-start":-1,"rg-read":[0,2,3][state.round],"rg-quiz":state.qkind==="vocab"?4:1,"rg-trace":5,"rg-check":6,"rg-gate":6,"rg-result":6,"rg-done":7}[id];
     $("rgTrail").hidden=(t<0); var bars=$("rgTrail").children; for(var i=0;i<bars.length;i++){ bars[i].className=i<t?"done":(i===t?"now":""); }
     try{ window.scrollTo({top:0,behavior:"auto"}); }catch(e){ window.scrollTo(0,0); }
   }
@@ -477,9 +519,10 @@ body:has(.amf-rg){background:#FBF6EC}
     var r=ROUNDS[state.round];
     if(state.item<r.items.length-1){ state.item++; renderItem(); return; }
     // Adaptive: don't show harder rounds to a child who passed most of this one
-    var enough = state.round===0 ? state.score[0]>=2 : state.score[1]>=2;
-    if(state.round<ROUNDS.length-1 && enough){ startRound(state.round+1); return; }
-    startTrace();
+    // Adaptive: letters → joined letters → words → sentence → vocabulary → tracing
+    if(state.round===0){ if(state.score[0]>=2) startQuiz("joined"); else startTrace(); return; }
+    if(state.round===1){ if(state.score[1]>=2) startRound(2); else startQuiz("vocab"); return; }
+    startQuiz("vocab");
   }
   $("rgSpeakBtn").addEventListener("click",function(){ speak(ROUNDS[state.round].items[state.item],this); $("rgPic").classList.remove("hide"); });
   $("rgYesBtn").addEventListener("click",function(){
@@ -493,10 +536,34 @@ body:has(.amf-rg){background:#FBF6EC}
     setTimeout(nextItem,CLIPS.p_labas?(it.key==="s_cat"?5600:4300):1600);
   });
 
+  // ---------- quiz: joined letters + vocabulary ----------
+  var qLock=false;
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function startQuiz(kind){ state.qkind=kind; state.qi=0; show("rg-quiz",2); renderQ(); }
+  function renderQ(){
+    var Q=QUIZ[state.qkind], it=Q.items[state.qi]; qLock=false;
+    $("rgQPill").textContent=Q.name; $("rgQPill").style.background=Q.color;
+    $("rgQCount").textContent=(state.qi+1)+" of "+Q.items.length; $("rgQAsk").textContent=it.ask;
+    var pr=$("rgQPrompt"); pr.className="rg-qprompt ar"+(it.small?" small":""); if(it.pic){ pr.innerHTML=PICS[it.pic]; } else { pr.textContent=it.p; }
+    var box=$("rgQOpts"); box.className="rg-opts"+(it.small?" small":""); box.innerHTML="";
+    shuffle(it.o).forEach(function(o){ var b=document.createElement("button"); b.type="button"; b.className="rg-opt"; b.lang="ar"; b.textContent=o; b.setAttribute("data-ok",o===it.o[0]?"1":"0"); b.addEventListener("click",function(){ answerQ(b); }); box.appendChild(b); });
+  }
+  function markRight(){ Array.prototype.forEach.call($("rgQOpts").children,function(x){ if(x.getAttribute("data-ok")==="1") x.classList.add("ok"); }); }
+  function answerQ(b){
+    if(qLock) return; qLock=true; var sc=state.q[state.qkind]; sc[1]++;
+    if(b.getAttribute("data-ok")==="1"){ sc[0]++; b.classList.add("ok"); addStar(); chime(); setTimeout(nextQ,700); }
+    else { b.classList.add("no"); markRight(); tone(220,.2,"triangle"); setTimeout(nextQ,1400); }
+  }
+  $("rgQPass").addEventListener("click",function(){ if(qLock) return; qLock=true; state.q[state.qkind][1]++; state.passes++; track("rg_pass",{round:QUIZ[state.qkind].name}); markRight(); setTimeout(nextQ,1300); });
+  function nextQ(){
+    if(state.qi<QUIZ[state.qkind].items.length-1){ state.qi++; renderQ(); return; }
+    if(state.qkind==="joined") startRound(1); else startTrace();
+  }
+
   // ---------- tracing ----------
   var gcv=$("rgGuideCv"),dcv=$("rgDrawCv"),gctx=gcv.getContext("2d"),dctx=dcv.getContext("2d");
   var TL=["ب","ت","م","س"], TKEY={"ب":"l_ba","ت":"l_ta","م":"l_mim","س":"l_sin"}, TSAY={"ب":"باء","ت":"تاء","م":"ميم","س":"سين"};
-  var W=0,H=0,size=0,fontPx=0,ty=0,mask=null,cells=null,total=0,covered=0,drawing=false,last=null,cur="ب",tIdx=0,alertT=null,CELL=10,wasOn=true,doneShown=false,busy=false;
+  var W=0,H=0,size=0,fontPx=0,ty=0,mask=null,cells=null,total=0,covered=0,comp={},compTot=[],compCov=[],drawing=false,last=null,cur="ب",tIdx=0,alertT=null,CELL=10,wasOn=true,doneShown=false,busy=false;
   var FONT=function(){ return '700 '+Math.round(fontPx)+'px "Noto Naskh Arabic","Geeza Pro",serif'; };
   function fitLetter(){
     // Size and place the glyph from its real bounds, so the board has no big empty space
@@ -517,21 +584,31 @@ body:has(.amf-rg){background:#FBF6EC}
     mc.clearRect(0,0,W,H); drawLetter(mc,"#000",0); var core=mc.getImageData(0,0,W,H).data;
     cells={}; total=0; covered=0;
     for(var y=0;y<H;y+=CELL){ for(var x=0;x<W;x+=CELL){ var cx=Math.min(W-1,x+CELL/2|0),cy=Math.min(H-1,y+CELL/2|0); if(core[(cy*W+cx)*4+3]>100){ cells[x+","+y]=false; total++; } } }
-    var sx=-1,sy=0; for(var k in cells){ var p=k.split(",").map(Number); if(p[0]>sx){sx=p[0];sy=p[1];} }
+    // Separate pieces of the letter (the body and each dot), so a dot can't be skipped
+    comp={}; compTot=[]; compCov=[];
+    Object.keys(cells).forEach(function(k){ if(comp[k]!==undefined) return; var id=compTot.length, stack=[k], n=0; comp[k]=id;
+      while(stack.length){ var c=stack.pop(), q=c.split(",").map(Number); n++;
+        for(var dy=-CELL;dy<=CELL;dy+=CELL){ for(var dx=-CELL;dx<=CELL;dx+=CELL){ var nk=(q[0]+dx)+","+(q[1]+dy); if(cells[nk]!==undefined&&comp[nk]===undefined){ comp[nk]=id; stack.push(nk); } } } }
+      compTot.push(n); compCov.push(0); });
+    var big=0; compTot.forEach(function(n,i){ if(n>compTot[big]) big=i; });
+    var sx=-1,sy=0; for(var k in cells){ if(comp[k]!==big) continue; var p=k.split(",").map(Number); if(p[0]>sx){sx=p[0];sy=p[1];} }
     if(sx>=0){ gctx.fillStyle="#5FB8A2"; gctx.beginPath(); gctx.arc(sx+CELL/2,sy+CELL/2,9,0,6.3); gctx.fill(); gctx.fillStyle="#22305A"; gctx.font="700 13px Outfit,sans-serif"; gctx.textAlign="center"; gctx.fillText("start",Math.min(W-24,sx+CELL/2),Math.max(14,sy-10)); }
     doneShown=false; busy=false; updateMeter();
   }
   function onLetter(x,y){ x|=0; y|=0; if(x<0||y<0||x>=W||y>=H) return false; return mask[(y*W+x)*4+3]>60; }
-  function cover(x,y){ var r=Math.max(12,W*0.04); for(var yy=y-r;yy<=y+r;yy+=CELL/2){ for(var xx=x-r;xx<=x+r;xx+=CELL/2){ var key=(Math.floor(xx/CELL)*CELL)+","+(Math.floor(yy/CELL)*CELL); if(cells[key]===false){ cells[key]=true; covered++; } } } updateMeter(); }
-  function updateMeter(){ var pct=total?Math.min(100,Math.round(covered/total*100/0.85)):0; $("rgMeter").style.width=pct+"%"; if(pct>=100&&!doneShown){ doneShown=true; traceSuccess(); } }
+  function cover(x,y){ var r=Math.max(12,W*0.04); for(var yy=y-r;yy<=y+r;yy+=CELL/2){ for(var xx=x-r;xx<=x+r;xx+=CELL/2){ var key=(Math.floor(xx/CELL)*CELL)+","+(Math.floor(yy/CELL)*CELL); if(cells[key]===false){ cells[key]=true; covered++; compCov[comp[key]]++; } } } updateMeter(); }
+  function piecesDone(){ for(var i=0;i<compTot.length;i++){ if(compCov[i]<compTot[i]*0.8) return false; } return true; }
+  function updateMeter(){ var pct=total?Math.min(100,Math.round(covered/total*100/0.95)):0; var all=piecesDone(); $("rgMeter").style.width=(all?pct:Math.min(pct,92))+"%";
+    if(pct>=100&&all&&!doneShown){ doneShown=true; traceSuccess(); }
+    else if(pct>=90&&!all&&!doneShown&&compTot.length>1){ $("rgTraceSay").textContent="Almost! Don't forget the dot."; } }
   // Off the letter: alert, then clean the board automatically so the child can try again
-  function offAlert(){ if(busy) return; busy=true; drawing=false; var a=$("rgOffAlert"); a.classList.remove("show"); void a.offsetWidth; a.classList.add("show"); tone(180,.18,"square"); try{ if(navigator.vibrate) navigator.vibrate(60);}catch(e){} $("rgTraceSay").textContent="Oops! Let's try again."; clearTimeout(alertT); alertT=setTimeout(function(){ a.classList.remove("show"); setupTrace(); $("rgTraceSay").textContent="Start at the green dot. Stay on the letter."; },900); }
+  function offAlert(){ if(busy) return; busy=true; drawing=false; var a=$("rgOffAlert"); a.classList.remove("show"); void a.offsetWidth; a.classList.add("show"); tone(180,.18,"square"); try{ if(navigator.vibrate) navigator.vibrate(60);}catch(e){} $("rgTraceSay").textContent="Oops! Try again."; clearTimeout(alertT); alertT=setTimeout(function(){ a.classList.remove("show"); setupTrace(); $("rgTraceSay").textContent="Start at the green dot."; },900); }
   function pos(e){ var r=dcv.getBoundingClientRect(); return {x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}; }
   dcv.addEventListener("pointerdown",function(e){ e.preventDefault(); if(busy) return; state.traceTried=true; try{dcv.setPointerCapture(e.pointerId);}catch(_){} drawing=true; last=pos(e); wasOn=onLetter(last.x,last.y); if(!wasOn) offAlert(); else cover(last.x,last.y); });
   dcv.addEventListener("pointermove",function(e){ if(!drawing||busy) return; e.preventDefault(); var p=pos(e),on=onLetter(p.x,p.y); if(!on){ offAlert(); return; } dctx.lineCap="round"; dctx.lineJoin="round"; dctx.lineWidth=Math.max(12,W*0.045); dctx.strokeStyle="#F2B035"; dctx.beginPath(); dctx.moveTo(last.x,last.y); dctx.lineTo(p.x,p.y); dctx.stroke(); cover(p.x,p.y); last=p; });
   ["pointerup","pointercancel","pointerleave"].forEach(function(t){ dcv.addEventListener(t,function(){ drawing=false; }); });
   function letterTabs(){ Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b,i){ b.setAttribute("aria-pressed",i===tIdx?"true":"false"); }); $("rgTraceCount").textContent=(tIdx+1)+" of "+TL.length; }
-  function setLetter(i){ tIdx=i; cur=TL[i]; letterTabs(); $("rgTraceSay").textContent="Start at the green dot. Stay on the letter."; speak({say:TSAY[cur],key:TKEY[cur]}); requestAnimationFrame(setupTrace); }
+  function setLetter(i){ tIdx=i; cur=TL[i]; letterTabs(); $("rgTraceSay").textContent="Start at the green dot."; speak({say:TSAY[cur],key:TKEY[cur]}); requestAnimationFrame(setupTrace); }
   // Passed or skipped: go straight to the next letter; after the last one, go to the result
   function nextLetter(ok){
     var tab=root.querySelectorAll(".rg-letters button")[tIdx]; if(tab) tab.classList.add(ok?"ok":"skip");
@@ -539,18 +616,18 @@ body:has(.amf-rg){background:#FBF6EC}
   }
   function traceSuccess(){ busy=true; drawing=false; addStar(); chime(); confetti(); state.traced=true; state.traceScore=(state.traceScore||0)+1; $("rgTraceSay").textContent=tIdx<TL.length-1?"Bravo! Next letter…":"Bravo!"; setTimeout(function(){ nextLetter(true); },1100); }
   $("rgTracePass").addEventListener("click",function(){ if(busy&&doneShown) return; track("rg_pass",{round:"Tracing",letter:cur}); clearTimeout(alertT); $("rgOffAlert").classList.remove("show"); nextLetter(false); });
-  function startTrace(){ show("rg-trace",3); state.traceScore=0; Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.classList.remove("ok","skip"); }); tIdx=0; cur=TL[0]; letterTabs(); $("rgTraceSay").textContent="Start at the green dot. Stay on the letter."; var go=function(){ requestAnimationFrame(setupTrace); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
+  function startTrace(){ show("rg-trace",3); state.traceScore=0; Array.prototype.forEach.call(root.querySelectorAll(".rg-letters button"),function(b){ b.classList.remove("ok","skip"); }); tIdx=0; cur=TL[0]; letterTabs(); $("rgTraceSay").textContent="Start at the green dot."; var go=function(){ requestAnimationFrame(setupTrace); }; go(); var t=setTimeout(go,1500); try{ document.fonts.load('700 100px "Noto Naskh Arabic"').then(function(){clearTimeout(t);go();},go); }catch(e){} }
   window.addEventListener("resize",function(){ if(!$("rg-trace").hidden&&!busy) setupTrace(); });
 
   // ---------- level ----------
   function computeLevel(){
     var s=state.score;
     if(s[0]<2) return "first_steps";
-    if(s[1]<2) return "letters";
+    if(state.q.joined[0]<2||s[1]<2) return "letters";
     if(s[2]<1) return "words";
     return "sentences";
   }
-  function scoreText(){ var s=state.score; return "Letters "+s[0]+"/4 · Words "+(state.tried[1]?s[1]+"/3":"not tried")+" · Sentence "+(state.tried[2]?(s[2]?"yes":"not yet"):"not tried")+(state.traceTried?" · Traced "+(state.traceScore||0)+"/4":""); }
+  function scoreText(){ var s=state.score; return "Letters "+s[0]+"/4 · Words "+(state.tried[1]?s[1]+"/3":"not tried")+" · Sentence "+(state.tried[2]?(s[2]?"yes":"not yet"):"not tried")+(state.q.joined[1]?" · Joined "+state.q.joined[0]+"/4":"")+(state.q.vocab[1]?" · Vocabulary "+state.q.vocab[0]+"/5":"")+(state.traceTried?" · Traced "+(state.traceScore||0)+"/4":""); }
 
   // ---------- checking moment → gate ----------
   function finishGame(){
@@ -613,6 +690,9 @@ body:has(.amf-rg){background:#FBF6EC}
     $("rgScL").textContent=s[0]+"/4";
     $("rgScW").textContent=state.tried[1]?s[1]+"/3":"Next time";
     $("rgScS").textContent=state.tried[2]?(s[2]?"Yes":"Not yet"):"Next time";
+    $("rgScJ").textContent=state.q.joined[1]?state.q.joined[0]+"/4":"Next time";
+    $("rgScV").textContent=state.q.vocab[1]?state.q.vocab[0]+"/5":"Next time";
+    $("rgScT").textContent=state.traceTried?(state.traceScore||0)+"/4":"Next time";
     $("rgClubTitle").textContent="A weekly "+L.name+" for "+(state.name||"your child");
     $("rgDateQ").textContent="Which times suit "+(state.name||"your child")+"? Tick all that work (UAE time)";
     $("rgPriceMicro").textContent=PRICE+" · cancel any month";
@@ -689,7 +769,7 @@ body:has(.amf-rg){background:#FBF6EC}
     try{ navigator.clipboard.writeText(msg).then(function(){ $("rgCopied").hidden=false; $("rgWaHint").hidden=true; },function(){}); }catch(e){}
   });
   $("rgAgainBtn").addEventListener("click",function(){
-    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; state.times=[]; shown=false;
+    state.round=0; state.item=0; state.stars=0; state.score=[0,0,0]; state.tried=[0,0,0]; state.passes=0; state.traced=false; state.levelKey=""; state.date=""; state.times=[]; state.q={joined:[0,0],vocab:[0,0]}; state.qkind=""; shown=false;
     $("rgStarCount").textContent="0"; $("rgCopied").hidden=true; $("rgBookBtn").disabled=false; $("rgBookBtn").textContent="Send my times";
     show("rg-start",0);
   });

@@ -51,3 +51,13 @@ board 10:7 with the letter sized from its real bounds (no empty space under it).
 letter (ب ت م س): a letter passes at ~85% coverage and moves on by itself (no Finish button); going off
 the letter shows "Oops! Let's try again" and the board clears itself; Pass skips one letter; after the
 last letter the game moves on to the result. reading_scores now include "Traced x/4".
+
+v8 (Nov 23, Marya's feedback): two new steps built from the AMF workbooks. "Joined letters" (from Letter
+Shapes + Split & Join): ـبـ and ـجـ (which letter?), جَمَل (which letters?), و + ل + د (which word?).
+"Vocabulary" (from the picture flashcards): sun, book, moon, pencil, car → choose the Arabic word.
+Tap answers (3 shuffled options + "I don't know"); wrong answers show the right one. Order: Letters →
+Joined → Words → Sentence → Vocab → Tracing → Result (children who read fewer than 2 letters go straight
+to tracing; fewer than 2 words skips the sentence). Level: Words group now also needs 2/4 joined letters.
+Vocabulary is reported, not used for the level. Tracing is stricter: ~95% of the letter AND every piece
+(body, each dot) 80% covered before "Bravo" ("Almost! Don't forget the dot."). The instruction line above
+the board is one fixed line so the board never moves while tracing.
